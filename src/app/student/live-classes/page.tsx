@@ -9,6 +9,7 @@ import {
   Volume2, Maximize2, Radio, Download, Share2
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { LiveClassroom } from '@/components/live/live-classroom';
 
 interface LiveClass {
   id: string;
@@ -21,6 +22,9 @@ interface LiveClass {
   duration: string;
   status: 'LIVE' | 'SCHEDULED' | 'ENDED';
   recordingUrl?: string;
+  meetingType?: 'WEBRTC' | 'ZOOM' | 'YOUTUBE';
+  meetingUrl?: string;
+  meetingId?: string;
 }
 
 const mockClasses: LiveClass[] = [
@@ -34,6 +38,7 @@ const mockClasses: LiveClass[] = [
     scheduledAt: 'Today, 5:00 PM IST',
     duration: '90 mins',
     status: 'LIVE',
+    meetingType: 'WEBRTC',
   },
   {
     id: 'lc-2',
@@ -45,6 +50,9 @@ const mockClasses: LiveClass[] = [
     scheduledAt: 'Tomorrow, 6:00 PM IST',
     duration: '75 mins',
     status: 'SCHEDULED',
+    meetingType: 'ZOOM',
+    meetingUrl: 'https://zoom.us/j/9876543210',
+    meetingId: '987 654 3210',
   },
   {
     id: 'lc-3',
@@ -117,99 +125,22 @@ export default function StudentLiveClassesPage() {
 
         {/* Interactive Classroom View Modal / In-Page Stage */}
         {activeRoom ? (
-          <div className="bg-slate-950 rounded-3xl overflow-hidden border border-slate-800 shadow-2xl text-white">
-            <div className="p-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <span className="w-3 h-3 rounded-full bg-red-500 animate-ping" />
-                <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
-                  Live Now
-                </span>
-                <h2 className="font-bold text-sm sm:text-base text-slate-100">{activeRoom.title}</h2>
-              </div>
-              <Button
-                size="sm"
-                variant="destructive"
-                onClick={() => setActiveRoom(null)}
-                className="text-xs"
-              >
-                Leave Classroom
-              </Button>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 h-[600px]">
-              {/* Teacher Video Stream */}
-              <div className="lg:col-span-2 bg-black relative flex flex-col justify-between p-6">
-                <div className="flex items-center justify-between text-xs text-slate-400">
-                  <span className="bg-slate-900/80 backdrop-blur px-3 py-1.5 rounded-lg flex items-center gap-2">
-                    <User className="w-3.5 h-3.5 text-brand-400" />
-                    Teacher: {activeRoom.teacher}
-                  </span>
-                  <span className="bg-slate-900/80 backdrop-blur px-3 py-1.5 rounded-lg">
-                    👥 42 Students Attending
-                  </span>
-                </div>
-
-                <div className="text-center space-y-3">
-                  <div className="w-24 h-24 rounded-full border-4 border-brand-500 overflow-hidden mx-auto shadow-2xl">
-                    <img
-                      src={activeRoom.teacherAvatar}
-                      alt={activeRoom.teacher}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <h3 className="text-lg font-bold text-white">Optics & Ray Diagrams Live Stage</h3>
-                  <p className="text-xs text-emerald-400 font-medium">● HD Audio & Video Broadcast Active</p>
-                </div>
-
-                {/* Bottom Classroom Controls */}
-                <div className="flex items-center justify-center gap-3">
-                  <Button
-                    onClick={toggleHandRaise}
-                    className={`text-xs font-semibold ${
-                      handRaised ? 'bg-amber-600 hover:bg-amber-700' : 'bg-slate-800 hover:bg-slate-700'
-                    }`}
-                  >
-                    <Hand className="w-4 h-4 mr-1.5" />
-                    {handRaised ? 'Lower Hand' : 'Raise Hand'}
-                  </Button>
-                </div>
-              </div>
-
-              {/* Live Classroom Chat */}
-              <div className="lg:col-span-1 bg-slate-900 border-l border-slate-800 flex flex-col h-full">
-                <div className="p-3.5 border-b border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-300">
-                  <div className="flex items-center gap-1.5">
-                    <MessageSquare className="w-4 h-4 text-brand-400" />
-                    Live Class Discussion
-                  </div>
-                  <span className="text-[10px] text-slate-500">Moderated</span>
-                </div>
-
-                <div className="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
-                  {chatMessages.map((m, i) => (
-                    <div key={i} className="p-2.5 rounded-xl bg-slate-800/60 border border-slate-800 space-y-0.5">
-                      <span className={`font-bold ${m.user === 'You' ? 'text-brand-400' : m.user.includes('Dr.') ? 'text-amber-400' : 'text-slate-300'}`}>
-                        {m.user}:
-                      </span>
-                      <p className="text-slate-200 mt-0.5">{m.msg}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <form onSubmit={handleSendMessage} className="p-3 border-t border-slate-800 flex gap-2">
-                  <input
-                    placeholder="Ask a question in class..."
-                    className="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-brand-500"
-                    value={inputMsg}
-                    onChange={e => setInputMsg(e.target.value)}
-                  />
-                  <Button type="submit" size="sm" className="bg-brand-600 hover:bg-brand-700 text-xs">
-                    Send
-                  </Button>
-                </form>
-              </div>
-            </div>
+          <div className="space-y-4">
+            <LiveClassroom
+              classId={activeRoom.id}
+              title={activeRoom.title}
+              courseTitle={activeRoom.courseTitle}
+              instructorName={activeRoom.teacher}
+              userName="Arjun Gupta"
+              userRole="STUDENT"
+              meetingType={(activeRoom as any).meetingType || 'WEBRTC'}
+              meetingUrl={(activeRoom as any).meetingUrl}
+              meetingId={(activeRoom as any).meetingId}
+              onClose={() => setActiveRoom(null)}
+            />
           </div>
+
+
         ) : null}
 
         {/* Live Now Featured Card */}

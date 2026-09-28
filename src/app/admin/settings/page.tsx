@@ -33,6 +33,7 @@ interface Setting {
 }
 
 const groupLabels: Record<string, string> = {
+  payment: 'Payment Gateway & Razorpay Config',
   general: 'General Settings',
   contact: 'Contact Information',
   social: 'Social Media Links',
@@ -55,6 +56,43 @@ export default function AdminSettingsPage() {
   const websiteLogoInputRef = useRef<HTMLInputElement>(null);
   const adminLogoInputRef = useRef<HTMLInputElement>(null);
   const faviconInputRef = useRef<HTMLInputElement>(null);
+
+  const [testingRazorpay, setTestingRazorpay] = useState(false);
+
+  const handleTestRazorpay = async () => {
+    setTestingRazorpay(true);
+    try {
+      const res = await fetch('/api/admin/payments/test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          keyId: getValue('razorpay_key_id'),
+          keySecret: getValue('razorpay_key_secret'),
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast({
+          title: 'Razorpay Connected! 💳',
+          description: `Verified in ${data.data.mode} mode. Webhook secret configured: ${data.data.webhookConfigured ? 'Yes' : 'No'}`,
+        });
+      } else {
+        toast({
+          title: 'Connection Failed',
+          description: data.error || 'Check Razorpay credentials',
+          variant: 'destructive',
+        });
+      }
+    } catch (err: any) {
+      toast({
+        title: 'Error',
+        description: err.message || 'Failed to test connection',
+        variant: 'destructive',
+      });
+    } finally {
+      setTestingRazorpay(false);
+    }
+  };
 
   useEffect(() => {
     fetchSettings();
@@ -592,9 +630,24 @@ export default function AdminSettingsPage() {
           Object.entries(groupedSettings).map(([group, groupSettings]) => (
             <div key={group} className="card p-6 space-y-4">
               <div className="border-b pb-3 flex items-center justify-between">
-                <h3 className="font-heading font-semibold text-foreground text-base">
-                  {groupLabels[group] || group}
-                </h3>
+                <div className="flex items-center gap-3">
+                  <h3 className="font-heading font-semibold text-foreground text-base">
+                    {groupLabels[group] || group}
+                  </h3>
+                  {group === 'payment' && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleTestRazorpay}
+                      loading={testingRazorpay}
+                      className="text-xs h-7 px-2.5 bg-brand-50 border-brand-200 text-brand-700 hover:bg-brand-100"
+                    >
+                      <RefreshCw className="w-3 h-3 mr-1" />
+                      Verify Razorpay Setup
+                    </Button>
+                  )}
+                </div>
                 <span className="text-xs text-muted-foreground">
                   {groupSettings.length} {groupSettings.length === 1 ? 'field' : 'fields'}
                 </span>
