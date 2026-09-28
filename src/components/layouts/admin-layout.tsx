@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   LayoutDashboard, BookOpen, Users, GraduationCap, ShoppingCart,
   Tag, FileText, Settings, Menu, X, ChevronRight, Bell,
@@ -86,8 +86,36 @@ interface AdminLayoutProps {
 export function AdminLayout({ children }: AdminLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [collapsedGroups, setCollapsedGroups] = useState<string[]>([]);
+  const [branding, setBranding] = useState<{ siteName: string; logoUrl: string | null; adminLogoUrl: string | null }>({
+    siteName: 'CyberMate Solutions',
+    logoUrl: null,
+    adminLogoUrl: null,
+  });
   const pathname = usePathname();
   const router = useRouter();
+
+  const fetchBranding = async () => {
+    try {
+      const res = await fetch('/api/settings');
+      const data = await res.json();
+      if (data.success && data.data) {
+        setBranding({
+          siteName: data.data.site_name || 'CyberMate Solutions',
+          logoUrl: data.data.logo_url || null,
+          adminLogoUrl: data.data.admin_logo_url || null,
+        });
+      }
+    } catch {
+      // Fallback to default
+    }
+  };
+
+  useEffect(() => {
+    fetchBranding();
+    const handleUpdate = () => fetchBranding();
+    window.addEventListener('site-settings-updated', handleUpdate);
+    return () => window.removeEventListener('site-settings-updated', handleUpdate);
+  }, []);
 
   const toggleGroup = (label: string) => {
     setCollapsedGroups(prev =>
@@ -101,17 +129,35 @@ export function AdminLayout({ children }: AdminLayoutProps) {
     router.push('/login');
   };
 
+  const displayLogo = branding.adminLogoUrl || branding.logoUrl;
+
   const Sidebar = () => (
     <div className="flex flex-col h-full bg-slate-900 text-slate-300">
       {/* Logo */}
-      <div className="flex items-center gap-2 p-5 border-b border-slate-800">
-        <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-brand-400 to-purple-500 flex items-center justify-center flex-shrink-0">
-          <BookOpen className="h-4 w-4 text-white" />
-        </div>
-        <div>
-          <div className="text-white font-bold text-sm">EduPro</div>
-          <div className="text-xs text-slate-500">Admin Panel</div>
-        </div>
+      <div className="flex items-center gap-3 p-5 border-b border-slate-800">
+        {displayLogo ? (
+          <div className="flex items-center gap-2.5 min-w-0">
+            <img
+              src={displayLogo}
+              alt={branding.siteName}
+              className="h-8 max-h-8 w-auto max-w-[120px] object-contain rounded"
+            />
+            <div className="min-w-0 flex-1">
+              <div className="text-white font-bold text-sm truncate">{branding.siteName}</div>
+              <div className="text-[11px] text-slate-400 font-medium">Admin Panel</div>
+            </div>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2.5">
+            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-brand-400 to-purple-500 flex items-center justify-center flex-shrink-0 shadow-md shadow-brand-500/20">
+              <BookOpen className="h-4 w-4 text-white" />
+            </div>
+            <div>
+              <div className="text-white font-bold text-sm truncate max-w-[150px]">{branding.siteName}</div>
+              <div className="text-xs text-slate-500">Admin Panel</div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Nav */}

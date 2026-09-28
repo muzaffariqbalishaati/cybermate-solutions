@@ -50,9 +50,13 @@ export function PublicFooter({ menu, settings }: PublicFooterProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-4">
+            <Link href="/" className="flex items-center gap-2 mb-4 group">
               {logoUrl ? (
-                <Image src={logoUrl} alt={siteName} width={130} height={36} className="h-9 w-auto brightness-200" />
+                <img
+                  src={logoUrl}
+                  alt={siteName}
+                  className="h-9 w-auto max-h-9 max-w-[180px] object-contain brightness-110 transition-transform duration-200 group-hover:scale-105"
+                />
               ) : (
                 <div className="flex items-center gap-2">
                   <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-brand-400 to-purple-500 flex items-center justify-center">

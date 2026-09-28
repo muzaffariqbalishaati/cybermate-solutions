@@ -31,6 +31,8 @@ const navItems = [
   { href: '/student/settings', label: 'Settings', icon: Settings },
 ];
 
+import { useBranding } from '@/hooks/use-branding';
+
 interface StudentLayoutProps {
   children: React.ReactNode;
   unreadNotifications?: number;
@@ -38,6 +40,7 @@ interface StudentLayoutProps {
 
 export function StudentLayout({ children, unreadNotifications = 0 }: StudentLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { siteName, logoUrl } = useBranding();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -52,10 +55,16 @@ export function StudentLayout({ children, unreadNotifications = 0 }: StudentLayo
       {/* Header */}
       <div className="flex items-center gap-2 p-5 border-b">
         <Link href="/student" className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
-            <BookOpen className="h-4 w-4 text-white" />
-          </div>
-          <span className="font-heading font-bold text-sm">EduPro</span>
+          {logoUrl ? (
+            <img src={logoUrl} alt={siteName} className="h-8 w-auto max-w-[130px] object-contain" />
+          ) : (
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
+                <BookOpen className="h-4 w-4 text-white" />
+              </div>
+              <span className="font-heading font-bold text-sm truncate max-w-[140px]">{siteName}</span>
+            </div>
+          )}
         </Link>
       </div>
 
@@ -137,10 +146,16 @@ export function StudentLayout({ children, unreadNotifications = 0 }: StudentLayo
             <Menu className="h-5 w-5" />
           </button>
           <Link href="/student" className="flex items-center gap-2">
-            <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
-              <BookOpen className="h-3.5 w-3.5 text-white" />
-            </div>
-            <span className="font-heading font-bold text-sm">EduPro</span>
+            {logoUrl ? (
+              <img src={logoUrl} alt={siteName} className="h-7 w-auto max-w-[120px] object-contain" />
+            ) : (
+              <div className="flex items-center gap-2">
+                <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
+                  <BookOpen className="h-3.5 w-3.5 text-white" />
+                </div>
+                <span className="font-heading font-bold text-sm truncate max-w-[140px]">{siteName}</span>
+              </div>
+            )}
           </Link>
         </header>
 

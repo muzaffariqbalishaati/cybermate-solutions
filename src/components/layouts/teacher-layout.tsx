@@ -19,8 +19,11 @@ const teacherNavItems = [
   { href: '/teacher/attendance', label: 'Mark Attendance', icon: Calendar },
 ];
 
+import { useBranding } from '@/hooks/use-branding';
+
 export function TeacherLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { siteName, logoUrl } = useBranding();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -34,11 +37,15 @@ export function TeacherLayout({ children }: { children: React.ReactNode }) {
     <div className="flex flex-col h-full bg-slate-900 text-white">
       <div className="p-6 border-b border-slate-800 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-brand-600 flex items-center justify-center font-bold text-white shadow-md">
-            EP
-          </div>
+          {logoUrl ? (
+            <img src={logoUrl} alt={siteName} className="h-8 max-h-8 w-auto max-w-[120px] object-contain rounded" />
+          ) : (
+            <div className="w-8 h-8 rounded-xl bg-brand-600 flex items-center justify-center font-bold text-white shadow-md">
+              {siteName.slice(0, 2).toUpperCase()}
+            </div>
+          )}
           <div>
-            <h2 className="font-bold text-sm tracking-wide">EduPro Teacher</h2>
+            <h2 className="font-bold text-sm tracking-wide truncate max-w-[130px]">{siteName}</h2>
             <p className="text-[10px] text-brand-400 font-semibold">Faculty Workspace</p>
           </div>
         </div>

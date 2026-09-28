@@ -10,12 +10,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { loginSchema, type LoginSchema } from '@/lib/validations';
 import { toast } from '@/hooks/use-toast';
+import { useBranding } from '@/hooks/use-branding';
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const from = searchParams.get('from') || '/';
   const [showPassword, setShowPassword] = useState(false);
+  const { siteName, logoUrl } = useBranding();
 
   const {
     register,
@@ -65,11 +67,21 @@ function LoginForm() {
         <div className="w-full max-w-md space-y-8">
           {/* Logo */}
           <div className="text-center">
-            <Link href="/" className="inline-flex items-center gap-2 mb-8">
-              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
-                <BookOpen className="h-5 w-5 text-white" />
-              </div>
-              <span className="text-2xl font-heading font-bold gradient-text">EduPro</span>
+            <Link href="/" className="inline-flex items-center gap-2 mb-8 group">
+              {logoUrl ? (
+                <img
+                  src={logoUrl}
+                  alt={siteName}
+                  className="h-10 w-auto max-h-10 max-w-[200px] object-contain transition-transform group-hover:scale-105"
+                />
+              ) : (
+                <>
+                  <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
+                    <BookOpen className="h-5 w-5 text-white" />
+                  </div>
+                  <span className="text-2xl font-heading font-bold gradient-text">{siteName}</span>
+                </>
+              )}
             </Link>
             <h1 className="text-3xl font-heading font-bold">Welcome back</h1>
             <p className="text-muted-foreground mt-2">Sign in to your account to continue</p>

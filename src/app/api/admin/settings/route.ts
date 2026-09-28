@@ -5,10 +5,26 @@ import { successResponse, errorResponse, handleApiError } from '@/lib/api-respon
 
 export const dynamic = 'force-dynamic';
 
+const DEFAULT_SETTINGS = [
+  { key: 'site_name', value: 'CyberMate Solutions', type: 'text', group: 'general', label: 'Website Name' },
+  { key: 'logo_url', value: '', type: 'image', group: 'general', label: 'Website Main Logo' },
+  { key: 'admin_logo_url', value: '', type: 'image', group: 'general', label: 'Admin Panel Logo' },
+  { key: 'favicon_url', value: '/favicon.ico', type: 'image', group: 'general', label: 'Favicon Icon' },
+];
+
 // GET /api/admin/settings
 export async function GET(req: NextRequest) {
   try {
     await requireRole(req, ['ADMIN']);
+    
+    // Ensure essential branding settings exist
+    for (const def of DEFAULT_SETTINGS) {
+      const exists = await prisma.siteSetting.findUnique({ where: { key: def.key } });
+      if (!exists) {
+        await prisma.siteSetting.create({ data: def });
+      }
+    }
+
     const settings = await prisma.siteSetting.findMany({
       orderBy: [{ group: 'asc' }, { key: 'asc' }],
     });
@@ -30,7 +46,7 @@ export async function PUT(req: NextRequest) {
       settings.map(({ key, value }: { key: string; value: string }) =>
         prisma.siteSetting.upsert({
           where: { key },
-          create: { key, value },
+          create: { key, value, group: 'general' },
           update: { value },
         })
       )

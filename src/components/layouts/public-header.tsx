@@ -70,9 +70,13 @@ export function PublicHeader({ menu, settings }: PublicHeaderProps) {
       <div className="section-container">
         <div className="flex h-16 items-center justify-between gap-4">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 shrink-0">
+          <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
             {logoUrl ? (
-              <Image src={logoUrl} alt={siteName} width={140} height={40} className="h-10 w-auto object-contain" />
+              <img
+                src={logoUrl}
+                alt={siteName}
+                className="h-10 w-auto max-h-10 max-w-[220px] object-contain transition-transform duration-200 group-hover:scale-105"
+              />
             ) : (
               <div className="flex items-center gap-2">
                 <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-brand-500 via-indigo-500 to-purple-600 flex items-center justify-center shadow-md shadow-brand-500/20">

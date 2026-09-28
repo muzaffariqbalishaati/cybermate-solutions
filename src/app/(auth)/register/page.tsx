@@ -10,10 +10,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { registerSchema, type RegisterSchema } from '@/lib/validations';
 import { toast } from '@/hooks/use-toast';
+import { useBranding } from '@/hooks/use-branding';
 
 export default function RegisterPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const { siteName, logoUrl } = useBranding();
 
   const {
     register,
@@ -54,14 +56,24 @@ export default function RegisterPage() {
       <div className="w-full max-w-lg">
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
-              <BookOpen className="h-5 w-5 text-white" />
-            </div>
-            <span className="text-2xl font-heading font-bold gradient-text">EduPro</span>
+          <Link href="/" className="inline-flex items-center gap-2 mb-6 group">
+            {logoUrl ? (
+              <img
+                src={logoUrl}
+                alt={siteName}
+                className="h-10 w-auto max-h-10 max-w-[200px] object-contain transition-transform group-hover:scale-105"
+              />
+            ) : (
+              <>
+                <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center">
+                  <BookOpen className="h-5 w-5 text-white" />
+                </div>
+                <span className="text-2xl font-heading font-bold gradient-text">{siteName}</span>
+              </>
+            )}
           </Link>
           <h1 className="text-3xl font-heading font-bold">Create your account</h1>
-          <p className="text-muted-foreground mt-2">Join 50,000+ students learning on EduPro</p>
+          <p className="text-muted-foreground mt-2">Join thousands of students learning on {siteName}</p>
         </div>
 
         {/* Benefits */}
