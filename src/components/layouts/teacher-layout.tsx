@@ -30,11 +30,10 @@ export function TeacherLayout({ children }: { children: React.ReactNode }) {
     router.push('/login');
   };
 
-  return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden">
-      {/* Sidebar for Desktop */}
-      <aside className="hidden md:flex flex-col w-64 bg-slate-900 text-white border-r border-slate-800">
-        <div className="p-6 border-b border-slate-800 flex items-center gap-3">
+  const NavContent = () => (
+    <div className="flex flex-col h-full bg-slate-900 text-white">
+      <div className="p-6 border-b border-slate-800 flex items-center justify-between">
+        <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-xl bg-brand-600 flex items-center justify-center font-bold text-white shadow-md">
             EP
           </div>
@@ -43,56 +42,89 @@ export function TeacherLayout({ children }: { children: React.ReactNode }) {
             <p className="text-[10px] text-brand-400 font-semibold">Faculty Workspace</p>
           </div>
         </div>
+        <button
+          onClick={() => setSidebarOpen(false)}
+          className="md:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </div>
 
-        <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto">
-          {teacherNavItems.map(item => {
-            const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  'flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all',
-                  isActive
-                    ? 'bg-brand-600 text-white shadow-md'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-                )}
-              >
-                <item.icon className="w-4 h-4" />
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
+      <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto">
+        {teacherNavItems.map(item => {
+          const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href);
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                'flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all',
+                isActive
+                  ? 'bg-brand-600 text-white shadow-md'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+              )}
+              onClick={() => setSidebarOpen(false)}
+            >
+              <item.icon className="w-4 h-4" />
+              {item.label}
+            </Link>
+          );
+        })}
+      </nav>
 
-        <div className="p-4 border-t border-slate-800 space-y-2">
-          <Link
-            href="/"
-            className="flex items-center gap-2 text-xs text-slate-400 hover:text-white px-3 py-2 rounded-lg hover:bg-slate-800 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Public Website
-          </Link>
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-2 text-xs text-red-400 hover:text-red-300 px-3 py-2 rounded-lg hover:bg-red-500/10 transition-colors font-medium"
-          >
-            <LogOut className="w-4 h-4" />
-            Sign Out
-          </button>
-        </div>
+      <div className="p-4 border-t border-slate-800 space-y-2">
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-xs text-slate-400 hover:text-white px-3 py-2 rounded-lg hover:bg-slate-800 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Public Website
+        </Link>
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-2 text-xs text-red-400 hover:text-red-300 px-3 py-2 rounded-lg hover:bg-red-500/10 transition-colors font-medium"
+        >
+          <LogOut className="w-4 h-4" />
+          Sign Out
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="flex h-screen bg-slate-50 overflow-hidden">
+      {/* Sidebar for Desktop */}
+      <aside className="hidden md:flex flex-col w-64 bg-slate-900 text-white border-r border-slate-800 flex-shrink-0">
+        <NavContent />
       </aside>
+
+      {/* Mobile Drawer */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-50 flex md:hidden">
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setSidebarOpen(false)}
+          />
+          <div className="relative w-64 flex flex-col shadow-2xl">
+            <NavContent />
+          </div>
+        </div>
+      )}
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
         {/* Top Navbar */}
-        <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 z-10">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="md:hidden p-2 text-slate-600 hover:text-slate-900"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
+        <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-6 z-10 sticky top-0 flex-shrink-0">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="md:hidden p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+              aria-label="Open sidebar"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+            <span className="md:hidden font-bold text-sm text-slate-800">Faculty Workspace</span>
+          </div>
 
           <div className="flex items-center gap-4 ml-auto">
             <div className="flex items-center gap-3">

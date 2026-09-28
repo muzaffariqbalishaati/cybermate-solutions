@@ -79,9 +79,43 @@ export default async function CoursesPage({
             <p className="text-muted-foreground">{total} courses available</p>
           </div>
 
+          {/* Mobile Filter Pills (horizontally scrollable on mobile) */}
+          <div className="lg:hidden mb-6 space-y-3">
+            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none text-xs">
+              <Link
+                href="/courses"
+                className={`whitespace-nowrap px-3.5 py-1.5 rounded-full border font-medium transition-colors ${!searchParams.category ? 'bg-primary text-primary-foreground border-primary' : 'bg-card text-muted-foreground border-border'}`}
+              >
+                All Categories
+              </Link>
+              {categories.map(cat => (
+                <Link
+                  key={cat.id}
+                  href={`/courses?category=${cat.slug}`}
+                  className={`whitespace-nowrap px-3.5 py-1.5 rounded-full border font-medium transition-colors ${searchParams.category === cat.slug ? 'bg-primary text-primary-foreground border-primary' : 'bg-card text-muted-foreground border-border'}`}
+                >
+                  {cat.name}
+                </Link>
+              ))}
+            </div>
+
+            <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none text-xs">
+              <span className="text-muted-foreground self-center mr-1 text-[11px] font-medium">Grades:</span>
+              {['6', '7', '8', '9', '10', '11', '12'].map(grade => (
+                <Link
+                  key={grade}
+                  href={`/courses?grade=${grade}${searchParams.category ? `&category=${searchParams.category}` : ''}`}
+                  className={`px-2.5 py-1 rounded-full border text-xs transition-colors shrink-0 ${searchParams.grade === grade ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground'}`}
+                >
+                  Class {grade}
+                </Link>
+              ))}
+            </div>
+          </div>
+
           <div className="flex gap-8 flex-col lg:flex-row">
-            {/* Sidebar Filters */}
-            <aside className="w-full lg:w-56 flex-shrink-0">
+            {/* Desktop Sidebar Filters */}
+            <aside className="hidden lg:block w-56 flex-shrink-0">
               <div className="card p-5 space-y-6 sticky top-20">
                 <h3 className="font-heading font-semibold">Filters</h3>
 

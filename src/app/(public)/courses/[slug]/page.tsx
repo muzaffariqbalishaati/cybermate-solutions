@@ -501,18 +501,40 @@ export default async function CourseDetailPage({ params }: CoursePageProps) {
 
           </div>
 
-          {/* Right Col on mobile: Bottom bar CTA */}
-          <div className="lg:hidden">
+          {/* Right Col on mobile: Card CTA and Sticky Bottom Bar */}
+          <div className="lg:hidden pb-16">
             <div className="card p-6 text-center space-y-4">
               <div className="text-2xl font-bold text-slate-900">
                 {formatCurrency(course.salePrice || course.price)}
               </div>
               <Link href={`/checkout?course=${encodeURIComponent(course.slug)}`} className="w-full block">
-                <Button className="w-full py-6 font-bold bg-brand-600 text-white">
+                <Button className="w-full py-6 font-bold bg-brand-600 text-white shadow-lg shadow-brand-500/25">
                   Enroll in this Course
                 </Button>
               </Link>
             </div>
+          </div>
+
+          {/* Sticky Mobile Floating Bottom Enroll Bar */}
+          <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-3 flex items-center justify-between shadow-2xl">
+            <div>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-xl font-bold font-heading text-slate-900">
+                  {formatCurrency(course.salePrice || course.price)}
+                </span>
+                {course.salePrice && (
+                  <span className="text-xs line-through text-slate-400">
+                    {formatCurrency(course.price)}
+                  </span>
+                )}
+              </div>
+              <span className="text-[11px] text-emerald-600 font-semibold">{discountPercent}% OFF • Instant Access</span>
+            </div>
+            <Button asChild size="sm" className="bg-brand-600 hover:bg-brand-700 text-white font-bold px-5 shadow-md shadow-brand-500/20">
+              <Link href={`/checkout?course=${encodeURIComponent(course.slug)}`}>
+                Enroll Now →
+              </Link>
+            </Button>
           </div>
 
         </div>

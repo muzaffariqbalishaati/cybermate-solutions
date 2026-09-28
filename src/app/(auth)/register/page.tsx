@@ -43,7 +43,7 @@ export default function RegisterPage() {
       }
 
       toast({ title: 'Account Created!', description: 'Welcome to EduPro! You are now logged in.', variant: 'default' });
-      router.push('/student');
+      window.location.href = '/student';
     } catch {
       toast({ title: 'Error', description: 'Something went wrong. Please try again.', variant: 'destructive' });
     }

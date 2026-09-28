@@ -66,11 +66,11 @@ export async function requireRole(req: NextRequest, roles: Role[]): Promise<JWTP
 export function createAuthCookie(token: string): string {
   const isProduction = process.env.NODE_ENV === 'production';
   const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-  return `auth-token=${token}; Path=/; Expires=${expires.toUTCString()}; HttpOnly; SameSite=Strict${isProduction ? '; Secure' : ''}`;
+  return `auth-token=${token}; Path=/; Expires=${expires.toUTCString()}; HttpOnly; SameSite=Lax${isProduction ? '; Secure' : ''}`;
 }
 
 export function clearAuthCookie(): string {
-  return `auth-token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Strict`;
+  return `auth-token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax`;
 }
 
 export async function logSession(userId: string, token: string, req?: NextRequest): Promise<void> {

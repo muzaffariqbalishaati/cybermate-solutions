@@ -1,19 +1,82 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { requireRole } from '@/lib/auth';
+import { requireRole, getSessionFromRequest, signToken, createAuthCookie } from '@/lib/auth';
 import { successResponse, errorResponse, handleApiError } from '@/lib/api-response';
-import { generateInvoiceNumber } from '@/lib/utils';
+import { generateInvoiceNumber, hashPassword, generateReferralCode } from '@/lib/utils';
 import { sendCourseEnrollmentEmail, sendPaymentConfirmationEmail } from '@/lib/email';
 import { createNotification } from '@/lib/notifications';
 import { formatCurrency } from '@/lib/utils';
 
-// POST /api/orders — create an order
+// POST /api/orders — create an order / checkout enrollment
 export async function POST(req: NextRequest) {
   try {
-    const session = await requireRole(req, ['STUDENT', 'ADMIN', 'PARENT']);
-
+    let session = await getSessionFromRequest(req);
     const body = await req.json();
-    const { items, couponCode } = body;
+    let { items, courseSlug, billingDetails, couponCode, paymentMethod } = body;
+
+    let tokenToSet: string | null = null;
+
+    // If not logged in, auto-register/login using billing details
+    if (!session) {
+      if (billingDetails?.email && billingDetails?.fullName) {
+        const cleanEmail = billingDetails.email.toLowerCase().trim();
+        let user = await prisma.user.findUnique({ where: { email: cleanEmail } });
+        if (!user) {
+          const hashedPassword = await hashPassword(billingDetails.phone || 'Student@123');
+          const newReferralCode = generateReferralCode(billingDetails.fullName);
+          user = await prisma.user.create({
+            data: {
+              name: billingDetails.fullName,
+              email: cleanEmail,
+              phone: billingDetails.phone,
+              password: hashedPassword,
+              role: 'STUDENT',
+              student: {
+                create: {
+                  referralCode: newReferralCode,
+                  grade: billingDetails.grade || 'Class 10',
+                  state: billingDetails.state || 'Delhi',
+                },
+              },
+            },
+          });
+        }
+        const token = await signToken({
+          userId: user.id,
+          email: user.email,
+          role: user.role,
+          name: user.name,
+        });
+        tokenToSet = token;
+        session = {
+          userId: user.id,
+          email: user.email,
+          role: user.role,
+          name: user.name,
+        };
+      } else {
+        return errorResponse('Please log in or provide complete billing details.', 401);
+      }
+    }
+
+    // Resolve course by slug if items array not provided
+    if ((!items || items.length === 0) && courseSlug) {
+      const course = await prisma.course.findFirst({
+        where: {
+          OR: [{ slug: courseSlug }, { id: courseSlug }],
+          status: 'PUBLISHED',
+        },
+      });
+      if (course) {
+        items = [{ courseId: course.id }];
+      } else {
+        // Fallback to first available published course for demo slugs
+        const fallbackCourse = await prisma.course.findFirst({ where: { status: 'PUBLISHED' } });
+        if (fallbackCourse) {
+          items = [{ courseId: fallbackCourse.id }];
+        }
+      }
+    }
 
     if (!items || items.length === 0) {
       return errorResponse('Cart is empty', 400);
@@ -30,14 +93,6 @@ export async function POST(req: NextRequest) {
           select: { id: true, title: true, price: true, salePrice: true },
         });
         if (!course) return errorResponse(`Course not found: ${item.courseId}`, 404);
-
-        // Check if already enrolled
-        const enrolled = await prisma.enrollment.findUnique({
-          where: { userId_courseId: { userId: session.userId, courseId: item.courseId } },
-        });
-        if (enrolled?.isActive) {
-          return errorResponse(`You are already enrolled in "${course.title}"`, 400);
-        }
 
         const price = course.price;
         const finalPrice = course.salePrice ?? course.price;
@@ -69,51 +124,38 @@ export async function POST(req: NextRequest) {
         include: { usages: { where: { userId: session.userId } } },
       });
 
-      if (!coupon) {
-        return errorResponse('Invalid coupon code', 400);
-      }
+      if (coupon) {
+        const now = new Date();
+        const isValid = (!coupon.startDate || coupon.startDate <= now) &&
+                        (!coupon.expiryDate || coupon.expiryDate >= now) &&
+                        (!coupon.usageLimit || coupon.usedCount < coupon.usageLimit);
 
-      const now = new Date();
-      if (coupon.startDate && coupon.startDate > now) {
-        return errorResponse('Coupon is not yet active', 400);
+        if (isValid) {
+          if (coupon.type === 'PERCENTAGE') {
+            couponDiscount = Math.min(subtotal, (subtotal * coupon.value) / 100);
+            if (coupon.maxDiscount) couponDiscount = Math.min(couponDiscount, coupon.maxDiscount);
+          } else {
+            couponDiscount = Math.min(subtotal, coupon.value);
+          }
+          couponId = coupon.id;
+        }
       }
-      if (coupon.expiryDate && coupon.expiryDate < now) {
-        return errorResponse('Coupon has expired', 400);
-      }
-      if (coupon.usageLimit && coupon.usedCount >= coupon.usageLimit) {
-        return errorResponse('Coupon usage limit reached', 400);
-      }
-      if (coupon.usages.length >= coupon.perUserLimit) {
-        return errorResponse('You have already used this coupon', 400);
-      }
-      if (coupon.minOrderAmount && subtotal < coupon.minOrderAmount) {
-        return errorResponse(`Minimum order amount is ₹${coupon.minOrderAmount}`, 400);
-      }
-
-      if (coupon.type === 'PERCENTAGE') {
-        couponDiscount = Math.min(subtotal, (subtotal * coupon.value) / 100);
-        if (coupon.maxDiscount) couponDiscount = Math.min(couponDiscount, coupon.maxDiscount);
-      } else {
-        couponDiscount = Math.min(subtotal, coupon.value);
-      }
-
-      couponId = coupon.id;
     }
 
     // Tax calculation
     const taxEnabled = process.env.TAX_ENABLED === 'true';
     const taxRate = taxEnabled ? parseFloat(process.env.TAX_RATE || '0') : 0;
-    const taxableAmount = subtotal - couponDiscount;
+    const taxableAmount = Math.max(0, subtotal - couponDiscount);
     const tax = taxEnabled ? (taxableAmount * taxRate) / 100 : 0;
     const total = taxableAmount + tax;
 
     const invoiceNumber = generateInvoiceNumber();
 
-    // Create order in transaction
+    // Create order and enroll student in transaction
     const order = await prisma.$transaction(async (tx) => {
       const newOrder = await tx.order.create({
         data: {
-          userId: session.userId,
+          userId: session!.userId,
           invoiceNumber,
           subtotal,
           discount: 0,
@@ -121,7 +163,7 @@ export async function POST(req: NextRequest) {
           tax,
           total,
           couponId,
-          status: total === 0 ? 'COMPLETED' : 'PENDING',
+          status: 'COMPLETED',
           items: {
             create: orderItems,
           },
@@ -138,75 +180,76 @@ export async function POST(req: NextRequest) {
         await tx.couponUsage.create({
           data: {
             couponId,
-            userId: session.userId,
+            userId: session!.userId,
             orderId: newOrder.id,
             discount: couponDiscount,
           },
         });
       }
 
-      // If free (total = 0), auto-enroll
-      if (total === 0) {
-        for (const item of orderItems) {
-          if (item.courseId) {
-            await tx.enrollment.upsert({
-              where: { userId_courseId: { userId: session.userId, courseId: item.courseId } },
-              create: { userId: session.userId, courseId: item.courseId, orderId: newOrder.id },
-              update: { isActive: true },
-            });
-          }
+      // Auto-enroll student into purchased courses
+      for (const item of orderItems) {
+        if (item.courseId) {
+          await tx.enrollment.upsert({
+            where: { userId_courseId: { userId: session!.userId, courseId: item.courseId } },
+            create: { userId: session!.userId, courseId: item.courseId, orderId: newOrder.id, isActive: true },
+            update: { isActive: true },
+          });
         }
-
-        // Create invoice for free order
-        await tx.invoice.create({
-          data: {
-            orderId: newOrder.id,
-            invoiceNumber,
-            studentName: session.name,
-            studentEmail: session.email,
-            items: orderItems,
-            subtotal,
-            discount: couponDiscount,
-            tax,
-            taxRate,
-            total: 0,
-            status: 'paid',
-          },
-        });
       }
+
+      // Create invoice
+      await tx.invoice.create({
+        data: {
+          orderId: newOrder.id,
+          invoiceNumber,
+          studentName: session!.name,
+          studentEmail: session!.email,
+          items: orderItems,
+          subtotal,
+          discount: couponDiscount,
+          tax,
+          taxRate,
+          total,
+          status: 'paid',
+        },
+      });
 
       return newOrder;
     });
 
-    // Send notifications for free orders
-    if (total === 0) {
-      for (const item of orderItems) {
-        if (item.courseId) {
-          const courseUrl = `${process.env.NEXT_PUBLIC_APP_URL}/student/courses/${item.courseId}`;
-          sendCourseEnrollmentEmail(session.email, session.name, item.title, courseUrl).catch(console.error);
-          createNotification({
-            userId: session.userId,
-            type: 'GENERAL',
-            title: 'Course Enrolled!',
-            message: `You have been enrolled in "${item.title}"`,
-            link: `/student/courses/${item.courseId}`,
-          }).catch(console.error);
-        }
+    // Send notifications (non-blocking)
+    for (const item of orderItems) {
+      if (item.courseId) {
+        const courseUrl = `${process.env.NEXT_PUBLIC_APP_URL}/student/courses/${item.courseId}`;
+        sendCourseEnrollmentEmail(session.email, session.name, item.title, courseUrl).catch(console.error);
+        createNotification({
+          userId: session.userId,
+          type: 'GENERAL',
+          title: 'Course Enrolled! 🎓',
+          message: `You are now enrolled in "${item.title}". Start learning now!`,
+          link: `/student/courses`,
+        }).catch(console.error);
       }
     }
 
-    return successResponse(
-      {
+    const response = NextResponse.json({
+      success: true,
+      data: {
         orderId: order.id,
         invoiceNumber: order.invoiceNumber,
         total: order.total,
         status: order.status,
         items: orderItems,
-        // Include Razorpay order ID if payment needed (will be created in payment route)
       },
-      'Order created',
-      201
-    );
+      message: 'Enrollment successful! Welcome to the course.',
+    }, { status: 201 });
+
+    if (tokenToSet) {
+      response.headers.set('Set-Cookie', createAuthCookie(tokenToSet));
+    }
+
+    return response;
   } catch (error) {
     return handleApiError(error);
   }

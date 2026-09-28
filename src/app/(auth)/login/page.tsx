@@ -44,10 +44,15 @@ function LoginForm() {
 
       // Redirect based on role
       const role = result.data?.role;
-      if (role === 'ADMIN') router.push('/admin');
-      else if (role === 'TEACHER') router.push('/teacher');
-      else if (role === 'PARENT') router.push('/parent');
-      else router.push('/student');
+      let target = '/student';
+      if (role === 'ADMIN') target = '/admin';
+      else if (role === 'TEACHER') target = '/teacher';
+      else if (role === 'PARENT') target = '/parent';
+
+      if (from && from !== '/' && !from.includes('/login') && !from.includes('/register')) {
+        target = from;
+      }
+      window.location.href = target;
     } catch {
       toast({ title: 'Error', description: 'Something went wrong. Please try again.', variant: 'destructive' });
     }

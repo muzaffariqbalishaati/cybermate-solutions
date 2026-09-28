@@ -133,7 +133,7 @@ export default async function StudentDashboardPage() {
                   ? getDaysRemaining(enrollment.expiresAt)
                   : null;
                 return (
-                  <Link key={enrollment.id} href={`/student/courses/${enrollment.courseId}`}>
+                  <Link key={enrollment.id} href={`/student/courses/${enrollment.course.slug}`}>
                     <div className="card-hover p-4 flex gap-3">
                       <div className="h-14 w-14 rounded-xl bg-brand-50 flex items-center justify-center flex-shrink-0">
                         <BookOpen className="h-7 w-7 text-brand-500" />

@@ -105,13 +105,13 @@ function CheckoutForm() {
         description: 'Welcome to EduPro! Your course access is activated.',
       });
 
-      router.push('/student/courses?enrolled=success');
+      window.location.href = '/student/courses?enrolled=success';
     } catch {
       toast({
         title: 'Payment successful',
         description: 'Your enrollment has been registered.',
       });
-      router.push('/student/courses');
+      window.location.href = '/student/courses';
     } finally {
       setLoading(false);
     }

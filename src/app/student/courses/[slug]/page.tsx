@@ -64,7 +64,7 @@ export default function StudentCoursePlayerPage() {
   const [curriculum, setCurriculum] = useState<Chapter[]>(courseCurriculum);
   const [currentLesson, setCurrentLesson] = useState<Lesson>(courseCurriculum[0].lessons[2]); // l3
   const [activeTab, setActiveTab] = useState<'overview' | 'resources' | 'doubts' | 'notes'>('overview');
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [personalNotes, setPersonalNotes] = useState('Key concept: Decomposition reactions require energy in the form of heat, light or electricity for breaking down the reactants.');
   const [doubtText, setDoubtText] = useState('');
   const [askedDoubts, setAskedDoubts] = useState([
@@ -354,19 +354,24 @@ export default function StudentCoursePlayerPage() {
 
         {/* Right: Curriculum Sidebar */}
         {sidebarOpen && (
-          <aside className="w-80 sm:w-96 bg-slate-900 border-l border-slate-800 flex flex-col h-full z-10">
-            <div className="p-4 border-b border-slate-800 flex items-center justify-between">
-              <div>
-                <h3 className="font-bold text-sm text-white">Course Syllabus</h3>
-                <p className="text-[11px] text-slate-400">{allLessons.length} Total Lessons</p>
+          <>
+            <div
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-30 lg:hidden"
+              onClick={() => setSidebarOpen(false)}
+            />
+            <aside className="fixed inset-y-0 right-0 w-80 max-w-[85vw] lg:static lg:w-80 xl:w-96 bg-slate-900 border-l border-slate-800 flex flex-col h-full z-40 shadow-2xl lg:shadow-none">
+              <div className="p-4 border-b border-slate-800 flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-sm text-white">Course Syllabus</h3>
+                  <p className="text-[11px] text-slate-400">{allLessons.length} Total Lessons</p>
+                </div>
+                <button
+                  onClick={() => setSidebarOpen(false)}
+                  className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800"
+                >
+                  <X className="w-4 h-4" />
+                </button>
               </div>
-              <button
-                onClick={() => setSidebarOpen(false)}
-                className="text-slate-400 hover:text-white p-1"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
 
             <div className="flex-1 overflow-y-auto divide-y divide-slate-800/60 p-2 space-y-2">
               {curriculum.map((chap, cIdx) => (
@@ -414,6 +419,7 @@ export default function StudentCoursePlayerPage() {
               ))}
             </div>
           </aside>
+        </>
         )}
 
       </div>
