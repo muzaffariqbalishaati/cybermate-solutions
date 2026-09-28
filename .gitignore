@@ -41,3 +41,4 @@ yarn-error.log*
 # uploads (local temp uploads)
 /public/uploads/*
 !/public/uploads/.gitkeep
+.env*
