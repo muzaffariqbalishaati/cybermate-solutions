@@ -125,7 +125,7 @@ export default function RegisterPage() {
               <Input
                 id="phone"
                 type="tel"
-                placeholder="+91 98765 43210"
+                placeholder="+91 9934215013"
                 autoComplete="tel"
                 error={errors.phone?.message}
                 {...register('phone')}

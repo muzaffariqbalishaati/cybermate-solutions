@@ -176,7 +176,7 @@ function CheckoutForm() {
                       <label className="text-xs font-semibold text-slate-700">Mobile Number *</label>
                       <Input
                         required
-                        placeholder="+91 98765 43210"
+                        placeholder="+91 9934215013"
                         value={formData.phone}
                         onChange={e => setFormData({ ...formData, phone: e.target.value })}
                       />

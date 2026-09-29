@@ -11,11 +11,11 @@ export default function StudentProfilePage() {
   const [profile, setProfile] = useState({
     name: 'Aarav Sharma',
     email: 'student@cybermatesolutions.com',
-    phone: '+91 98765 43210',
+    phone: '+91 9934215013',
     grade: 'Class 10',
     school: 'Delhi Public School, R.K. Puram',
     parentName: 'Sanjay Sharma',
-    parentPhone: '+91 98765 43219',
+    parentPhone: '+91 9934215013',
   });
 
   const [saving, setSaving] = useState(false);

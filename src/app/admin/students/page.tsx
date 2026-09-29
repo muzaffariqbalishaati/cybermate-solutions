@@ -371,7 +371,7 @@ export default function AdminStudentsPage() {
                 <div className="space-y-1">
                   <label className="text-xs font-semibold text-slate-700">Phone Number</label>
                   <Input
-                    placeholder="+91 98765 43210"
+                    placeholder="+91 9934215013"
                     className="text-xs h-10"
                     value={newPhone}
                     onChange={e => setNewPhone(e.target.value)}

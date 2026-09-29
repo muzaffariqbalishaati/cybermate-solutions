@@ -80,7 +80,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <p className="text-xs font-semibold text-slate-400">Call Us Toll-Free</p>
-                      <p className="text-base font-bold text-slate-900">+91 98765 43210</p>
+                      <a href="tel:+919934215013" className="text-base font-bold text-slate-900 hover:text-brand-600 transition-colors">+91 9934215013</a>
                       <p className="text-xs text-slate-500">Mon-Sat, 9:00 AM - 8:00 PM IST</p>
                     </div>
                   </div>
@@ -91,7 +91,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <p className="text-xs font-semibold text-slate-400">WhatsApp Support</p>
-                      <p className="text-base font-bold text-slate-900">+91 98765 43211</p>
+                      <a href="https://wa.me/919934215013" target="_blank" rel="noopener noreferrer" className="text-base font-bold text-slate-900 hover:text-emerald-600 transition-colors">+91 9934215013</a>
                       <p className="text-xs text-slate-500">Fast replies within 15 minutes</p>
                     </div>
                   </div>
@@ -191,7 +191,7 @@ export default function ContactPage() {
                         <label className="text-xs font-semibold text-slate-700">Phone Number *</label>
                         <Input
                           required
-                          placeholder="+91 98765 43210"
+                          placeholder="+91 9934215013"
                           value={form.phone}
                           onChange={e => setForm({ ...form, phone: e.target.value })}
                         />

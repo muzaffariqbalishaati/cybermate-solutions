@@ -14,7 +14,7 @@ export function PublicFooter({ menu, settings }: PublicFooterProps) {
   const logoUrl = settings['logo_url'];
   const aboutText = settings['footer_about'] || 'India\'s premier online tuition platform providing quality education to students across the country.';
   const email = settings['contact_email'] || 'support@cybermatesolutions.com';
-  const phone = settings['phone'] || '+91 98765 43210';
+  const phone = settings['phone'] || '+91 9934215013';
   const address = settings['address'] || 'New Delhi, India';
   const copyright = settings['copyright_text'] || `© ${new Date().getFullYear()} ${siteName}. All rights reserved.`;
   const whatsapp = settings['whatsapp'];

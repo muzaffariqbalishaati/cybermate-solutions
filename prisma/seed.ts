@@ -77,8 +77,8 @@ async function main() {
     { key: 'logo_url', value: '', type: 'text', group: 'general', label: 'Logo URL' },
     { key: 'favicon_url', value: '/favicon.ico', type: 'text', group: 'general', label: 'Favicon' },
     { key: 'contact_email', value: 'support@cybermatesolutions.com', type: 'text', group: 'contact', label: 'Contact Email' },
-    { key: 'phone', value: '+91 98765 43210', type: 'text', group: 'contact', label: 'Phone' },
-    { key: 'whatsapp', value: '+91 98765 43210', type: 'text', group: 'contact', label: 'WhatsApp' },
+    { key: 'phone', value: '+91 9934215013', type: 'text', group: 'contact', label: 'Phone' },
+    { key: 'whatsapp', value: '+91 9934215013', type: 'text', group: 'contact', label: 'WhatsApp' },
     { key: 'address', value: 'New Delhi, India 110001', type: 'text', group: 'contact', label: 'Address' },
     { key: 'footer_about', value: "India's premier online tuition platform providing quality education to students across the country with expert teachers.", type: 'text', group: 'footer', label: 'Footer About Text' },
     { key: 'social_facebook', value: 'https://facebook.com/cybermatesolutions', type: 'text', group: 'social', label: 'Facebook URL' },
@@ -401,7 +401,7 @@ async function main() {
       email: 'admin@cybermatesolutions.com',
       password: await hashPassword('Admin@123'),
       role: 'ADMIN',
-      phone: '+91 98765 00001',
+      phone: '+91 9934215013',
       isActive: true,
     },
   });
@@ -413,7 +413,7 @@ async function main() {
       email: 'teacher@cybermatesolutions.com',
       password: await hashPassword('Teacher@123'),
       role: 'TEACHER',
-      phone: '+91 98765 00002',
+      phone: '+91 9934215013',
       isActive: true,
       teacher: {
         create: {
@@ -433,7 +433,7 @@ async function main() {
       email: 'teacher2@cybermatesolutions.com',
       password: await hashPassword('Teacher@123'),
       role: 'TEACHER',
-      phone: '+91 98765 00003',
+      phone: '+91 9934215013',
       isActive: true,
       teacher: {
         create: {
@@ -453,7 +453,7 @@ async function main() {
       email: 'teacher3@cybermatesolutions.com',
       password: await hashPassword('Teacher@123'),
       role: 'TEACHER',
-      phone: '+91 98765 00004',
+      phone: '+91 9934215013',
       isActive: true,
       teacher: {
         create: {
@@ -474,7 +474,7 @@ async function main() {
       email: 'student@cybermatesolutions.com',
       password: await hashPassword('Student@123'),
       role: 'STUDENT',
-      phone: '+91 98765 00010',
+      phone: '+91 9934215013',
       isActive: true,
       student: {
         create: {
@@ -494,7 +494,7 @@ async function main() {
       email: 'student2@cybermatesolutions.com',
       password: await hashPassword('Student@123'),
       role: 'STUDENT',
-      phone: '+91 98765 00011',
+      phone: '+91 9934215013',
       isActive: true,
       student: {
         create: {
@@ -515,7 +515,7 @@ async function main() {
       email: 'parent@cybermatesolutions.com',
       password: await hashPassword('Parent@123'),
       role: 'PARENT',
-      phone: '+91 98765 00020',
+      phone: '+91 9934215013',
       isActive: true,
       parent: {
         create: {

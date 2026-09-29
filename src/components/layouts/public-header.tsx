@@ -32,7 +32,7 @@ export function PublicHeader({ menu, settings }: PublicHeaderProps) {
 
   const siteName = settings['site_name'] || 'CyberMate Solutions';
   const logoUrl = settings['logo_url'];
-  const phone = settings['phone'];
+  const phone = settings['phone'] || '+91 9934215013';
   const loginBtnText = settings['header_login_btn'] || 'Login';
   const signupBtnText = settings['header_signup_btn'] || 'Join Free';
 
@@ -52,19 +52,17 @@ export function PublicHeader({ menu, settings }: PublicHeaderProps) {
     { id: 'contact', label: 'Contact', url: '/contact' },
   ];
 
-  const navItems = menu?.items || defaultItems;
+  const navItems = (menu?.items && menu.items.length > 0) ? menu.items : defaultItems;
 
-  const isDarkHero = pathname === '/' && !isScrolled;
+  const isDarkHeader = pathname === '/' && !isScrolled && !isMobileOpen;
 
   return (
     <header
       className={cn(
         'sticky top-0 z-50 w-full border-b transition-all duration-300',
-        isScrolled
-          ? 'bg-background/95 backdrop-blur-md shadow-sm border-border'
-          : isDarkHero
+        isDarkHeader
           ? 'bg-slate-950/80 backdrop-blur-md border-white/10 text-white'
-          : 'bg-background/90 backdrop-blur-md border-border'
+          : 'bg-background/98 backdrop-blur-md shadow-sm border-border text-foreground'
       )}
     >
       <div className="section-container">
@@ -84,7 +82,7 @@ export function PublicHeader({ menu, settings }: PublicHeaderProps) {
                 </div>
                 <span className={cn(
                   "text-2xl font-heading font-extrabold tracking-tight",
-                  isDarkHero ? "text-white" : "gradient-text"
+                  isDarkHeader ? "text-white" : "gradient-text"
                 )}>
                   {siteName}
                 </span>
@@ -101,7 +99,7 @@ export function PublicHeader({ menu, settings }: PublicHeaderProps) {
                     <button
                       className={cn(
                         'flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium transition-colors',
-                        isDarkHero
+                        isDarkHeader
                           ? 'text-slate-200 hover:text-white hover:bg-white/10'
                           : 'text-foreground/80 hover:text-foreground hover:bg-secondary'
                       )}
@@ -137,10 +135,10 @@ export function PublicHeader({ menu, settings }: PublicHeaderProps) {
                     className={cn(
                       'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
                       pathname === item.url
-                        ? isDarkHero
+                        ? isDarkHeader
                           ? 'text-white bg-white/15 shadow-sm'
                           : 'text-primary bg-primary/10'
-                        : isDarkHero
+                        : isDarkHeader
                         ? 'text-slate-200 hover:text-white hover:bg-white/10'
                         : 'text-foreground/80 hover:text-foreground hover:bg-secondary'
                     )}
@@ -159,7 +157,7 @@ export function PublicHeader({ menu, settings }: PublicHeaderProps) {
                 href={`tel:${phone}`}
                 className={cn(
                   "text-sm transition-colors",
-                  isDarkHero ? "text-slate-300 hover:text-white" : "text-muted-foreground hover:text-foreground"
+                  isDarkHeader ? "text-slate-300 hover:text-white" : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 📞 {phone}
@@ -169,7 +167,7 @@ export function PublicHeader({ menu, settings }: PublicHeaderProps) {
               variant="ghost"
               size="sm"
               className={cn(
-                isDarkHero && "text-slate-100 hover:text-white hover:bg-white/10"
+                isDarkHeader && "text-slate-100 hover:text-white hover:bg-white/10"
               )}
               asChild
             >
@@ -182,68 +180,100 @@ export function PublicHeader({ menu, settings }: PublicHeaderProps) {
 
           {/* Mobile menu button */}
           <button
+            type="button"
             className={cn(
-              "lg:hidden p-2 rounded-lg transition-colors",
-              isDarkHero ? "text-white hover:bg-white/10" : "hover:bg-secondary text-foreground"
+              "lg:hidden p-2.5 rounded-xl transition-all relative z-50 cursor-pointer active:scale-95",
+              isDarkHeader
+                ? "text-white hover:bg-white/10"
+                : "text-foreground hover:bg-secondary"
             )}
-            onClick={() => setIsMobileOpen(!isMobileOpen)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsMobileOpen(!isMobileOpen);
+            }}
+            aria-expanded={isMobileOpen}
             aria-label="Toggle menu"
           >
-            {isMobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {isMobileOpen ? (
+              <X className="h-6 w-6 text-foreground stroke-[2.5]" />
+            ) : (
+              <Menu className="h-6 w-6 stroke-[2.5]" />
+            )}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu Overlay & Drawer */}
+      {/* Mobile Collapsible Menu */}
       {isMobileOpen && (
-        <div className="lg:hidden fixed inset-0 top-16 z-50 flex flex-col">
-          {/* Backdrop */}
+        <>
           <div
-            className="fixed inset-0 top-16 bg-slate-950/60 backdrop-blur-sm transition-opacity animate-in fade-in duration-200"
+            className="fixed inset-0 top-16 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
             onClick={() => setIsMobileOpen(false)}
           />
-          {/* Drawer content */}
-          <div className="relative z-10 bg-background/98 backdrop-blur-xl border-b border-border shadow-2xl max-h-[calc(100vh-5rem)] overflow-y-auto animate-in slide-in-from-top-2 duration-200 pb-6">
-            <div className="section-container py-4 space-y-1.5">
-              {navItems.map(item => (
-                <div key={item.id}>
+          <div className="relative z-50 lg:hidden border-t border-border bg-background text-foreground shadow-2xl px-4 py-5 animate-in slide-in-from-top-2 duration-200 overflow-y-auto max-h-[calc(100vh-4rem)] pb-10">
+          <div className="space-y-1.5">
+            {navItems.map(item => (
+              <div key={item.id}>
+                <Link
+                  href={item.url || '#'}
+                  className={cn(
+                    'flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all app-tap',
+                    pathname === item.url
+                      ? 'text-primary bg-primary/10 shadow-sm'
+                      : 'text-foreground/85 hover:text-foreground hover:bg-secondary/70'
+                  )}
+                  onClick={() => setIsMobileOpen(false)}
+                >
+                  <span>{item.label}</span>
+                  <span className="text-xs text-muted-foreground/60">→</span>
+                </Link>
+                {item.children?.map(child => (
                   <Link
-                    href={item.url || '#'}
-                    className={cn(
-                      'flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all app-tap',
-                      pathname === item.url
-                        ? 'text-primary bg-primary/10 shadow-sm'
-                        : 'text-foreground/80 hover:text-foreground hover:bg-secondary/70'
-                    )}
+                    key={child.id}
+                    href={child.url || '#'}
+                    className="block pl-8 py-2.5 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-xl transition-colors app-tap"
                     onClick={() => setIsMobileOpen(false)}
                   >
-                    <span>{item.label}</span>
-                    <span className="text-xs text-muted-foreground/60">→</span>
+                    {child.label}
                   </Link>
-                  {item.children?.map(child => (
-                    <Link
-                      key={child.id}
-                      href={child.url || '#'}
-                      className="block pl-8 py-2.5 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-xl transition-colors app-tap"
-                      onClick={() => setIsMobileOpen(false)}
-                    >
-                      {child.label}
-                    </Link>
-                  ))}
-                </div>
-              ))}
-              <div className="pt-4 border-t border-border flex flex-col gap-2.5">
-                <Button variant="outline" className="w-full h-11 text-sm font-bold rounded-xl app-tap" asChild>
-                  <Link href="/login" onClick={() => setIsMobileOpen(false)}>{loginBtnText}</Link>
-                </Button>
-                <Button variant="gradient" className="w-full h-11 text-sm font-bold rounded-xl shadow-md shadow-brand-500/20 app-tap" asChild>
-                  <Link href="/register" onClick={() => setIsMobileOpen(false)}>{signupBtnText}</Link>
-                </Button>
+                ))}
               </div>
+            ))}
+          </div>
+
+          {/* Direct Support & WhatsApp on Mobile Menu */}
+          <div className="mt-4 p-3.5 bg-secondary/50 rounded-2xl border border-border flex items-center justify-between gap-3">
+            <div>
+              <p className="text-[11px] text-muted-foreground font-medium">Customer Support</p>
+              <a
+                href="tel:+919934215013"
+                className="text-sm font-bold text-foreground hover:text-primary transition-colors flex items-center gap-1.5"
+              >
+                <span>📞</span> +91 9934215013
+              </a>
             </div>
+            <a
+              href="https://wa.me/919934215013"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl flex items-center gap-1.5 shadow-sm app-tap"
+            >
+              <span>WhatsApp</span>
+            </a>
+          </div>
+
+          <div className="pt-4 mt-2 border-t border-border flex flex-col gap-2.5">
+            <Button variant="outline" className="w-full h-11 text-sm font-bold rounded-xl app-tap" asChild>
+              <Link href="/login" onClick={() => setIsMobileOpen(false)}>{loginBtnText}</Link>
+            </Button>
+            <Button variant="gradient" className="w-full h-11 text-sm font-bold rounded-xl shadow-md shadow-brand-500/20 app-tap" asChild>
+              <Link href="/register" onClick={() => setIsMobileOpen(false)}>{signupBtnText}</Link>
+            </Button>
           </div>
         </div>
-      )}
+      </>
+    )}
     </header>
   );
 }
