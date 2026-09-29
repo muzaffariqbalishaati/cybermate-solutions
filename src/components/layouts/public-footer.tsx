@@ -205,7 +205,6 @@ export function PublicFooter({ menu, settings }: PublicFooterProps) {
             <p>{copyright}</p>
             <div className="flex items-center gap-4">
               <FooterAccountLink />
-              <Link href="/admin" className="hover:text-slate-300 transition-colors">Admin</Link>
             </div>
           </div>
         </div>
