@@ -1,88 +1,114 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AdminLayout } from '@/components/layouts/admin-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Megaphone, Plus, Bell, Trash2, Calendar, CheckCircle2 } from 'lucide-react';
+import { Megaphone, Plus, Bell, Trash2, Calendar, CheckCircle2, RefreshCw, X } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { formatDate } from '@/lib/utils';
 
 interface Announcement {
   id: string;
   title: string;
   message: string;
-  targetRole: 'ALL' | 'STUDENT' | 'TEACHER' | 'PARENT';
-  priority: 'HIGH' | 'NORMAL';
+  targetRole: string | null;
+  priority: string;
   createdAt: string;
   isActive: boolean;
+  createdBy?: { name: string } | null;
 }
 
-const initialAnnouncements: Announcement[] = [
-  {
-    id: 'ann-1',
-    title: 'Pre-Board Mock Examination Series Schedule Released',
-    message: 'The dates for the upcoming full-length board mock examinations for Class 10 & 12 have been published in student portals. Please review the timetable and syllabus.',
-    targetRole: 'STUDENT',
-    priority: 'HIGH',
-    createdAt: '25 Sept 2026',
-    isActive: true,
-  },
-  {
-    id: 'ann-2',
-    title: 'Parent-Teacher Virtual Conference - 5th October',
-    message: 'Individual 1-on-1 virtual interaction slots between parents and subject mentors are now open for booking in the parent dashboard.',
-    targetRole: 'PARENT',
-    priority: 'HIGH',
-    createdAt: '22 Sept 2026',
-    isActive: true,
-  },
-  {
-    id: 'ann-3',
-    title: 'Platform Maintenance Notice: Sunday 2 AM - 4 AM IST',
-    message: 'We will be upgrading our video streaming servers. Brief interruption in lecture downloads may occur.',
-    targetRole: 'ALL',
-    priority: 'NORMAL',
-    createdAt: '18 Sept 2026',
-    isActive: true,
-  },
-];
-
 export default function AdminAnnouncementsPage() {
-  const [announcements, setAnnouncements] = useState<Announcement[]>(initialAnnouncements);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
+  // Form State
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
   const [targetRole, setTargetRole] = useState<'ALL' | 'STUDENT' | 'TEACHER' | 'PARENT'>('ALL');
   const [priority, setPriority] = useState<'HIGH' | 'NORMAL'>('NORMAL');
 
-  const handleDelete = (id: string) => {
-    setAnnouncements(prev => prev.filter(a => a.id !== id));
-    toast({ title: 'Announcement Removed' });
+  useEffect(() => {
+    fetchAnnouncements();
+  }, []);
+
+  const fetchAnnouncements = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch('/api/admin/announcements');
+      const data = await res.json();
+      if (data.success) {
+        setAnnouncements(data.data);
+      }
+    } catch {
+      toast({ title: 'Error', description: 'Failed to load announcements', variant: 'destructive' });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleCreate = (e: React.FormEvent) => {
+  const handleDelete = async (id: string, noticeTitle: string) => {
+    if (!confirm(`Delete announcement "${noticeTitle}"?`)) return;
+
+    try {
+      const res = await fetch('/api/admin/announcements', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setAnnouncements(prev => prev.filter(a => a.id !== id));
+        toast({ title: 'Announcement Deleted' });
+      } else {
+        throw new Error(data.error || 'Failed to delete');
+      }
+    } catch (err: any) {
+      toast({ title: 'Error', description: err.message, variant: 'destructive' });
+    }
+  };
+
+  const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !message.trim()) return;
+    if (!title.trim() || !message.trim()) {
+      toast({ title: 'Required Fields', description: 'Title and notice message are required', variant: 'destructive' });
+      return;
+    }
 
-    const newAnn: Announcement = {
-      id: `ann-${Date.now()}`,
-      title,
-      message,
-      targetRole,
-      priority,
-      createdAt: 'Just now',
-      isActive: true,
-    };
+    setSubmitting(true);
+    try {
+      const res = await fetch('/api/admin/announcements', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: title.trim(),
+          message: message.trim(),
+          targetRole,
+          priority,
+        }),
+      });
 
-    setAnnouncements([newAnn, ...announcements]);
-    setModalOpen(false);
-    setTitle('');
-    setMessage('');
-    toast({
-      title: 'Announcement Published! 📢',
-      description: 'Notice pushed to all selected user portals.',
-    });
+      const data = await res.json();
+      if (data.success) {
+        toast({
+          title: 'Announcement Published! 📢',
+          description: 'Notice pushed to all selected user dashboards.',
+        });
+        setModalOpen(false);
+        setTitle('');
+        setMessage('');
+        fetchAnnouncements();
+      } else {
+        throw new Error(data.error || 'Failed to publish announcement');
+      }
+    } catch (err: any) {
+      toast({ title: 'Error', description: err.message, variant: 'destructive' });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -100,22 +126,33 @@ export default function AdminAnnouncementsPage() {
             </p>
           </div>
 
-          <Button
-            onClick={() => setModalOpen(true)}
-            className="bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs py-5 px-5 shadow-lg shadow-brand-500/20"
-          >
-            <Plus className="w-4 h-4 mr-1.5" />
-            Create Announcement
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={fetchAnnouncements} title="Refresh Notices">
+              <RefreshCw className="w-4 h-4" />
+            </Button>
+            <Button
+              onClick={() => setModalOpen(true)}
+              className="bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs"
+            >
+              <Plus className="w-4 h-4 mr-1.5" />
+              Create Announcement
+            </Button>
+          </div>
         </div>
 
         {/* Modal: Create Announcement */}
         {modalOpen && (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl space-y-5">
+            <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl space-y-5 animate-in fade-in zoom-in-95">
               <div className="flex justify-between items-center pb-3 border-b">
-                <h3 className="font-bold text-lg text-slate-900">Create Announcement</h3>
-                <button onClick={() => setModalOpen(false)} className="text-slate-400 font-bold">✕</button>
+                <h3 className="font-bold text-lg text-slate-900">Publish Broadcast Notice</h3>
+                <button
+                  type="button"
+                  onClick={() => setModalOpen(false)}
+                  className="text-slate-400 hover:text-slate-600 font-bold p-1"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
 
               <form onSubmit={handleCreate} className="space-y-4">
@@ -123,7 +160,7 @@ export default function AdminAnnouncementsPage() {
                   <label className="text-xs font-semibold text-slate-700">Notice Title *</label>
                   <Input
                     required
-                    placeholder="e.g. Schedule Update for Sunday Mock Tests"
+                    placeholder="e.g. Pre-Board Mock Examination Timetable"
                     className="text-xs h-10"
                     value={title}
                     onChange={e => setTitle(e.target.value)}
@@ -152,30 +189,30 @@ export default function AdminAnnouncementsPage() {
                       value={priority}
                       onChange={e => setPriority(e.target.value as any)}
                     >
-                      <option value="NORMAL">Normal Notice</option>
-                      <option value="HIGH">High Priority (Red Alert)</option>
+                      <option value="NORMAL">Standard Notice</option>
+                      <option value="HIGH">High Priority (Urgent)</option>
                     </select>
                   </div>
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-700">Announcement Details *</label>
+                  <label className="text-xs font-semibold text-slate-700">Message Content *</label>
                   <textarea
-                    required
                     rows={4}
-                    placeholder="Write detailed instructions or information..."
-                    className="w-full text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                    required
+                    placeholder="Write detailed broadcast notice message..."
+                    className="w-full p-3 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-brand-500"
                     value={message}
                     onChange={e => setMessage(e.target.value)}
                   />
                 </div>
 
-                <div className="flex justify-end gap-3 pt-2">
+                <div className="flex justify-end gap-3 pt-3 border-t">
                   <Button type="button" variant="outline" onClick={() => setModalOpen(false)} className="text-xs">
                     Cancel
                   </Button>
-                  <Button type="submit" className="bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold">
-                    Broadcast Now
+                  <Button type="submit" loading={submitting} className="bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs">
+                    Broadcast Notice
                   </Button>
                 </div>
               </form>
@@ -185,41 +222,58 @@ export default function AdminAnnouncementsPage() {
 
         {/* Announcements List */}
         <div className="space-y-4">
-          {announcements.map(a => (
-            <div
-              key={a.id}
-              className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col sm:flex-row sm:items-start justify-between gap-4"
-            >
-              <div className="space-y-2 max-w-3xl">
-                <div className="flex items-center gap-2">
-                  <span className={`text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full ${
-                    a.priority === 'HIGH' ? 'bg-red-100 text-red-800' : 'bg-slate-100 text-slate-700'
-                  }`}>
-                    {a.priority} Priority
-                  </span>
-                  <span className="text-xs font-semibold text-brand-600">
-                    Audience: {a.targetRole}
-                  </span>
-                  <span className="text-xs text-slate-400">• {a.createdAt}</span>
+          {loading ? (
+            Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl border p-6 shadow-sm h-32 animate-pulse" />
+            ))
+          ) : announcements.length === 0 ? (
+            <div className="py-12 text-center text-slate-400 bg-white rounded-2xl border">
+              No announcements published yet. Click "Create Announcement" to post your first notice.
+            </div>
+          ) : (
+            announcements.map(a => (
+              <div
+                key={a.id}
+                className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-3 hover:shadow-md transition-shadow relative"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className={`text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full ${
+                        a.priority === 'HIGH' ? 'bg-red-100 text-red-800 border border-red-200' : 'bg-brand-50 text-brand-700'
+                      }`}>
+                        {a.priority === 'HIGH' ? 'High Priority' : 'Notice'}
+                      </span>
+                      <span className="text-xs font-semibold text-slate-500">
+                        Audience: <strong className="text-slate-800">{a.targetRole || 'Everyone'}</strong>
+                      </span>
+                    </div>
+
+                    <h3 className="font-bold text-slate-900 text-base">
+                      {a.title}
+                    </h3>
+                  </div>
+
+                  <button
+                    onClick={() => handleDelete(a.id, a.title)}
+                    className="text-slate-300 hover:text-red-600 p-1.5 rounded-lg transition-colors"
+                    title="Delete Announcement"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
 
-                <h3 className="font-bold text-slate-900 text-base">{a.title}</h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{a.message}</p>
-              </div>
+                <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                  {a.message}
+                </p>
 
-              <div>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => handleDelete(a.id)}
-                  className="text-xs text-red-500 hover:text-red-700 hover:bg-red-50"
-                >
-                  <Trash2 className="w-4 h-4 mr-1" />
-                  Delete
-                </Button>
+                <div className="pt-2 border-t flex items-center justify-between text-[11px] text-slate-400">
+                  <span>Published {formatDate(a.createdAt)}</span>
+                  {a.createdBy?.name && <span>By {a.createdBy.name}</span>}
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
 
       </div>

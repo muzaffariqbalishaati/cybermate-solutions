@@ -1,99 +1,125 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AdminLayout } from '@/components/layouts/admin-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Users, Plus, Star, BookOpen, Mail, Phone, GraduationCap } from 'lucide-react';
+import { Users, Plus, Star, BookOpen, Mail, Phone, GraduationCap, RefreshCw, Trash2, X } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 interface Teacher {
   id: string;
   name: string;
-  specialization: string;
-  experience: string;
-  assignedCourses: number;
-  rating: number;
   email: string;
-  avatar: string;
+  phone: string | null;
+  avatar: string | null;
+  isActive: boolean;
+  teacher?: {
+    specialization: string | null;
+    experience: number | string | null;
+    bio: string | null;
+  } | null;
+  _count: {
+    assignedCourses: number;
+  };
 }
 
-const mockTeachers: Teacher[] = [
-  {
-    id: 't-1',
-    name: 'Dr. Rajesh Verma',
-    specialization: 'Physics & Engineering Mechanics',
-    experience: '15+ Years (Ex-IIT Roorkee)',
-    assignedCourses: 2,
-    rating: 4.9,
-    email: 'rajesh.verma@edupro.com',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
-  },
-  {
-    id: 't-2',
-    name: 'Prof. Vikram Malhotra',
-    specialization: 'Pure Mathematics & Calculus',
-    experience: '18+ Years (ISI Kolkata)',
-    assignedCourses: 3,
-    rating: 4.8,
-    email: 'vikram.m@edupro.com',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80',
-  },
-  {
-    id: 't-3',
-    name: 'Meenakshi Iyer',
-    specialization: 'Organic & Physical Chemistry',
-    experience: '10+ Years (Delhi University)',
-    assignedCourses: 2,
-    rating: 4.9,
-    email: 'meenakshi.i@edupro.com',
-    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80',
-  },
-  {
-    id: 't-4',
-    name: 'Dr. Ananya Sen',
-    specialization: 'Biology & NEET Physiology',
-    experience: '12+ Years (AIIMS Alum)',
-    assignedCourses: 1,
-    rating: 4.9,
-    email: 'ananya.s@edupro.com',
-    avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&auto=format&fit=crop&q=80',
-  },
-];
-
 export default function AdminTeachersPage() {
-  const [teachers, setTeachers] = useState<Teacher[]>(mockTeachers);
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
+  // Form State
   const [name, setName] = useState('');
   const [specialization, setSpecialization] = useState('');
-  const [experience, setExperience] = useState('');
+  const [experience, setExperience] = useState('5+ Years');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('Teacher@123');
 
-  const handleAdd = (e: React.FormEvent) => {
+  useEffect(() => {
+    fetchTeachers();
+  }, []);
+
+  const fetchTeachers = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch('/api/admin/teachers');
+      const data = await res.json();
+      if (data.success) {
+        setTeachers(data.data);
+      }
+    } catch {
+      toast({ title: 'Error', description: 'Failed to load teachers', variant: 'destructive' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !email.trim()) return;
+    if (!name.trim() || !email.trim()) {
+      toast({ title: 'Missing details', description: 'Name and email are required', variant: 'destructive' });
+      return;
+    }
 
-    const newTeacher: Teacher = {
-      id: `t-${Date.now()}`,
-      name,
-      specialization: specialization || 'General Science',
-      experience: experience || '5+ Years',
-      assignedCourses: 1,
-      rating: 5.0,
-      email,
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
-    };
+    setSubmitting(true);
+    try {
+      const res = await fetch('/api/admin/teachers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim() || null,
+          specialization: specialization.trim() || 'General Faculty',
+          experience: experience.trim() || '5+ Years',
+          password,
+        }),
+      });
 
-    setTeachers([newTeacher, ...teachers]);
-    setModalOpen(false);
-    setName('');
-    setSpecialization('');
-    setEmail('');
-    toast({
-      title: 'Faculty Added! 👨‍🏫',
-      description: 'Teacher profile created and portal access granted.',
-    });
+      const data = await res.json();
+      if (data.success) {
+        toast({
+          title: 'Faculty Added! 👨‍🏫',
+          description: `Teacher profile created for ${name}.`,
+        });
+        setModalOpen(false);
+        setName('');
+        setSpecialization('');
+        setEmail('');
+        setPhone('');
+        fetchTeachers();
+      } else {
+        throw new Error(data.error || 'Failed to add teacher');
+      }
+    } catch (err: any) {
+      toast({ title: 'Error', description: err.message, variant: 'destructive' });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (id: string, teacherName: string) => {
+    if (!confirm(`Are you sure you want to remove faculty "${teacherName}"?`)) return;
+
+    try {
+      const res = await fetch('/api/admin/teachers', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setTeachers(prev => prev.filter(t => t.id !== id));
+        toast({ title: 'Teacher Removed', description: `${teacherName} profile deleted.` });
+      } else {
+        throw new Error(data.error || 'Failed to delete');
+      }
+    } catch (err: any) {
+      toast({ title: 'Error', description: err.message, variant: 'destructive' });
+    }
   };
 
   return (
@@ -104,37 +130,71 @@ export default function AdminTeachersPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl md:text-3xl font-heading font-bold text-slate-900">
-              Faculty Directory
+              Faculty Directory & Mentors
             </h1>
             <p className="text-slate-500 text-sm mt-1">
-              Manage expert educators, course allocations, and teaching credentials
+              Manage verified educator profiles, specializations, and course assignments
             </p>
           </div>
 
-          <Button
-            onClick={() => setModalOpen(true)}
-            className="bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs py-5 px-5 shadow-lg shadow-brand-500/20"
-          >
-            <Plus className="w-4 h-4 mr-1.5" />
-            Add New Educator
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={fetchTeachers} title="Refresh">
+              <RefreshCw className="w-4 h-4" />
+            </Button>
+            <Button
+              onClick={() => setModalOpen(true)}
+              className="bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs"
+            >
+              <Plus className="w-4 h-4 mr-1.5" />
+              Add New Faculty
+            </Button>
+          </div>
+        </div>
+
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-1">
+            <span className="text-xs font-semibold text-slate-500">Total Educators</span>
+            <p className="text-2xl font-bold text-slate-900">{teachers.length} Faculty</p>
+            <p className="text-[11px] text-slate-400">Verified teaching staff</p>
+          </div>
+
+          <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-1">
+            <span className="text-xs font-semibold text-slate-500">Live & Video Batches</span>
+            <p className="text-2xl font-bold text-brand-600">
+              {teachers.reduce((acc, t) => acc + (t._count?.assignedCourses || 0), 0)} Courses
+            </p>
+            <p className="text-[11px] text-slate-400">Assigned across subjects</p>
+          </div>
+
+          <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-1">
+            <span className="text-xs font-semibold text-slate-500">Platform Rating</span>
+            <p className="text-2xl font-bold text-amber-500">4.9 / 5.0 ⭐</p>
+            <p className="text-[11px] text-slate-400">From 12,000+ student ratings</p>
+          </div>
         </div>
 
         {/* Modal: Add Faculty */}
         {modalOpen && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-5">
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-5 animate-in fade-in zoom-in-95">
               <div className="flex justify-between items-center pb-3 border-b">
-                <h3 className="font-bold text-lg text-slate-900">Add Faculty Member</h3>
-                <button onClick={() => setModalOpen(false)} className="text-slate-400 font-bold">✕</button>
+                <h3 className="font-bold text-lg text-slate-900">Add New Educator</h3>
+                <button
+                  type="button"
+                  onClick={() => setModalOpen(false)}
+                  className="text-slate-400 hover:text-slate-600 font-bold p-1"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
 
               <form onSubmit={handleAdd} className="space-y-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-700">Educator Full Name *</label>
+                  <label className="text-xs font-semibold text-slate-700">Full Name *</label>
                   <Input
                     required
-                    placeholder="e.g. Dr. Kavita Sharma"
+                    placeholder="e.g. Dr. Rajesh Verma"
                     className="text-xs h-10"
                     value={name}
                     onChange={e => setName(e.target.value)}
@@ -142,44 +202,65 @@ export default function AdminTeachersPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-700">Specialization & Subject *</label>
-                  <Input
-                    required
-                    placeholder="e.g. Inorganic Chemistry & NEET"
-                    className="text-xs h-10"
-                    value={specialization}
-                    onChange={e => setSpecialization(e.target.value)}
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-700">Qualifications & Experience</label>
-                  <Input
-                    placeholder="e.g. Ph.D. IIT Delhi, 12+ Yrs Exp"
-                    className="text-xs h-10"
-                    value={experience}
-                    onChange={e => setExperience(e.target.value)}
-                  />
-                </div>
-
-                <div className="space-y-1">
                   <label className="text-xs font-semibold text-slate-700">Email Address *</label>
                   <Input
-                    type="email"
                     required
-                    placeholder="kavita@edupro.com"
+                    type="email"
+                    placeholder="faculty@edupro.com"
                     className="text-xs h-10"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                   />
                 </div>
 
-                <div className="flex justify-end gap-3 pt-2">
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-slate-700">Phone Number</label>
+                  <Input
+                    placeholder="+91 98765 00000"
+                    className="text-xs h-10"
+                    value={phone}
+                    onChange={e => setPhone(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-slate-700">Subject Specialization</label>
+                  <Input
+                    placeholder="e.g. Physics & Mechanics (Ex-IIT Roorkee)"
+                    className="text-xs h-10"
+                    value={specialization}
+                    onChange={e => setSpecialization(e.target.value)}
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-slate-700">Teaching Experience</label>
+                    <Input
+                      placeholder="e.g. 15+ Years"
+                      className="text-xs h-10"
+                      value={experience}
+                      onChange={e => setExperience(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-slate-700">Password</label>
+                    <Input
+                      type="password"
+                      placeholder="Teacher@123"
+                      className="text-xs h-10"
+                      value={password}
+                      onChange={e => setPassword(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-3 pt-3 border-t">
                   <Button type="button" variant="outline" onClick={() => setModalOpen(false)} className="text-xs">
                     Cancel
                   </Button>
-                  <Button type="submit" className="bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold">
-                    Add Educator
+                  <Button type="submit" loading={submitting} className="bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs">
+                    Create Faculty Profile
                   </Button>
                 </div>
               </form>
@@ -187,36 +268,80 @@ export default function AdminTeachersPage() {
           </div>
         )}
 
-        {/* Teachers Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {teachers.map(t => (
-            <div
-              key={t.id}
-              className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow p-6 space-y-4 text-center flex flex-col justify-between"
-            >
-              <div className="space-y-3">
-                <div className="w-20 h-20 rounded-2xl overflow-hidden mx-auto border-2 border-brand-500 shadow-md">
-                  <img src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
-                </div>
-
-                <div>
-                  <h3 className="font-bold text-slate-900 text-base">{t.name}</h3>
-                  <p className="text-xs font-semibold text-brand-600 mt-0.5">{t.specialization}</p>
-                  <p className="text-[11px] text-slate-400 mt-1">{t.experience}</p>
-                </div>
-
-                <div className="flex items-center justify-center gap-1.5 text-xs text-amber-500 font-bold">
-                  <Star className="w-4 h-4 fill-amber-400" />
-                  <span>{t.rating} Faculty Rating</span>
-                </div>
-              </div>
-
-              <div className="pt-3 border-t text-xs text-slate-500 flex justify-between items-center">
-                <span>{t.assignedCourses} Assigned Batches</span>
-                <span className="font-semibold text-slate-800">Active</span>
-              </div>
+        {/* Teachers Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {loading ? (
+            Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm h-48 animate-pulse" />
+            ))
+          ) : teachers.length === 0 ? (
+            <div className="col-span-full py-12 text-center text-slate-400 bg-white rounded-2xl border">
+              No faculty profiles found.
             </div>
-          ))}
+          ) : (
+            teachers.map(t => (
+              <div
+                key={t.id}
+                className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4 hover:shadow-md transition-shadow relative flex flex-col justify-between"
+              >
+                <div className="space-y-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-2xl bg-brand-100 text-brand-700 font-bold flex items-center justify-center text-sm shadow-sm overflow-hidden">
+                        {t.avatar ? (
+                          <img src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
+                        ) : (
+                          t.name.slice(0, 2).toUpperCase()
+                        )}
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-slate-900 text-base">{t.name}</h3>
+                        <p className="text-xs text-brand-600 font-medium">
+                          {t.teacher?.specialization || 'Educator'}
+                        </p>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => handleDelete(t.id, t.name)}
+                      className="text-slate-300 hover:text-red-500 transition-colors p-1"
+                      title="Delete Faculty"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <div className="space-y-1.5 text-xs text-slate-600 border-t pt-3">
+                    <div className="flex items-center gap-2">
+                      <GraduationCap className="w-3.5 h-3.5 text-slate-400" />
+                      <span>{t.teacher?.experience ? `${t.teacher.experience}+ Years Experience` : 'Experienced Faculty'}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Mail className="w-3.5 h-3.5 text-slate-400" />
+                      <span className="truncate">{t.email}</span>
+                    </div>
+                    {t.phone && (
+                      <div className="flex items-center gap-2">
+                        <Phone className="w-3.5 h-3.5 text-slate-400" />
+                        <span>{t.phone}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t flex items-center justify-between text-xs">
+                  <span className="text-slate-500 flex items-center gap-1 font-medium">
+                    <BookOpen className="w-3.5 h-3.5 text-brand-600" />
+                    {t._count?.assignedCourses || 0} Courses Assigned
+                  </span>
+                  <span className="font-bold text-amber-500 flex items-center gap-0.5">
+                    <Star className="w-3.5 h-3.5 fill-current" />
+                    4.9
+                  </span>
+                </div>
+              </div>
+            ))
+          )}
         </div>
 
       </div>

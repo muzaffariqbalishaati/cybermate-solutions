@@ -61,14 +61,14 @@ async function getAdminDashboardData() {
       // Monthly revenue for chart (last 6 months)
       prisma.$queryRaw`
         SELECT 
-          TO_CHAR(created_at, 'Mon YYYY') as month,
-          SUM(total) as revenue,
-          COUNT(*) as orders
-        FROM orders
-        WHERE status = 'COMPLETED'
-          AND created_at >= NOW() - INTERVAL '6 months'
-        GROUP BY TO_CHAR(created_at, 'Mon YYYY'), DATE_TRUNC('month', created_at)
-        ORDER BY DATE_TRUNC('month', created_at) ASC
+          TO_CHAR("createdAt", 'Mon YYYY') as month,
+          COALESCE(SUM("total"), 0)::float as revenue,
+          COUNT(*)::int as orders
+        FROM "orders"
+        WHERE "status"::text = 'COMPLETED'
+          AND "createdAt" >= NOW() - INTERVAL '6 months'
+        GROUP BY TO_CHAR("createdAt", 'Mon YYYY'), DATE_TRUNC('month', "createdAt")
+        ORDER BY DATE_TRUNC('month', "createdAt") ASC
       ` as Promise<Array<{ month: string; revenue: number; orders: number }>>,
     ]);
 

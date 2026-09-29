@@ -18,63 +18,36 @@ const navGroups = [
     label: 'Overview',
     items: [
       { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-      { href: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
+      { href: '/admin/analytics', label: 'Analytics & Revenue', icon: BarChart3 },
     ],
   },
   {
-    label: 'Content',
+    label: 'Academic Management',
     items: [
-      { href: '/admin/courses', label: 'Courses', icon: BookOpen },
-      { href: '/admin/categories', label: 'Categories', icon: Layers },
-      { href: '/admin/bundles', label: 'Bundles', icon: Package },
-      { href: '/admin/live-classes', label: 'Live Classes', icon: Video },
-      { href: '/admin/tests', label: 'Tests & Quizzes', icon: Calculator },
-      { href: '/admin/assignments', label: 'Assignments', icon: FileText },
-      { href: '/admin/question-bank', label: 'Question Bank', icon: HelpCircle },
+      { href: '/admin/courses', label: 'Courses & Curriculum', icon: BookOpen },
+      { href: '/admin/live-classes', label: 'Live Classes & Studios', icon: Video },
     ],
   },
   {
-    label: 'Users',
+    label: 'User Directory',
     items: [
-      { href: '/admin/students', label: 'Students', icon: GraduationCap },
-      { href: '/admin/teachers', label: 'Teachers', icon: Users },
-      { href: '/admin/parents', label: 'Parents', icon: Users },
+      { href: '/admin/students', label: 'Enrolled Students', icon: GraduationCap },
+      { href: '/admin/teachers', label: 'Faculty & Mentors', icon: Users },
     ],
   },
   {
-    label: 'Sales',
+    label: 'Sales & Revenue',
     items: [
-      { href: '/admin/orders', label: 'Orders', icon: ShoppingCart },
-      { href: '/admin/coupons', label: 'Coupons', icon: Tag },
-      { href: '/admin/refunds', label: 'Refunds', icon: Calculator },
-      { href: '/admin/scholarships', label: 'Scholarships', icon: Award },
+      { href: '/admin/orders', label: 'Orders & Ledger', icon: ShoppingCart },
+      { href: '/admin/coupons', label: 'Discount Coupons', icon: Tag },
     ],
   },
   {
-    label: 'Communication',
+    label: 'System & Branding',
     items: [
-      { href: '/admin/announcements', label: 'Announcements', icon: Megaphone },
-      { href: '/admin/doubts', label: 'Doubts', icon: MessageSquare },
-      { href: '/admin/email-templates', label: 'Email Templates', icon: Mail },
-    ],
-  },
-  {
-    label: 'Website',
-    items: [
-      { href: '/admin/homepage', label: 'Homepage', icon: Globe },
-      { href: '/admin/pages', label: 'Pages', icon: Layout },
-      { href: '/admin/menus', label: 'Navigation', icon: Menu },
-      { href: '/admin/testimonials', label: 'Testimonials', icon: Star },
-      { href: '/admin/faqs', label: 'FAQs', icon: HelpCircle },
-      { href: '/admin/reviews', label: 'Reviews', icon: Star },
-    ],
-  },
-  {
-    label: 'System',
-    items: [
-      { href: '/admin/settings', label: 'Site Settings', icon: Settings },
-      { href: '/admin/notifications', label: 'Notifications', icon: Bell },
-      { href: '/admin/audit-logs', label: 'Audit Logs', icon: FileText },
+      { href: '/admin/homepage', label: 'Homepage Customizer', icon: Globe },
+      { href: '/admin/announcements', label: 'Broadcast Notices', icon: Megaphone },
+      { href: '/admin/settings', label: 'Site & Gateway Settings', icon: Settings },
     ],
   },
 ];

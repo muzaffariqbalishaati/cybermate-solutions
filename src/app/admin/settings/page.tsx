@@ -674,6 +674,23 @@ export default function AdminSettingsPage() {
                         <option value="false">Disabled / Off</option>
                         <option value="true">Enabled / On</option>
                       </select>
+                    ) : setting.key === 'razorpay_mode' ? (
+                      <select
+                        className="form-input text-sm font-semibold text-slate-800"
+                        value={getValue(setting.key, setting.value || 'test')}
+                        onChange={e => handleChange(setting.key, e.target.value)}
+                      >
+                        <option value="test">🟡 Test Mode (Sandbox)</option>
+                        <option value="live">🟢 Live Mode (Real Transactions)</option>
+                      </select>
+                    ) : setting.type === 'password' || setting.key.includes('secret') ? (
+                      <Input
+                        type="password"
+                        placeholder="Enter secret key..."
+                        value={getValue(setting.key, setting.value || '')}
+                        onChange={e => handleChange(setting.key, e.target.value)}
+                        className="text-sm font-mono"
+                      />
                     ) : setting.key.includes('url') || setting.key.includes('social') ? (
                       <Input
                         type="url"

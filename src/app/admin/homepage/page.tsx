@@ -73,23 +73,43 @@ export default function AdminHomepagePage() {
     if (!editingSection) return;
     setSaving(true);
     try {
+      // Process content so any stringified JSON objects/arrays are parsed
+      const processedContent: Record<string, any> = {};
+      for (const [k, v] of Object.entries(editingSection.content)) {
+        if (typeof v === 'string') {
+          const trimmed = v.trim();
+          if ((trimmed.startsWith('{') && trimmed.endsWith('}')) || (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
+            try {
+              processedContent[k] = JSON.parse(trimmed);
+              continue;
+            } catch {
+              // keep as string
+            }
+          }
+        }
+        processedContent[k] = v;
+      }
+
       const res = await fetch('/api/admin/homepage', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           sectionKey: editingSection.sectionKey,
-          content: editingSection.content,
+          content: processedContent,
         }),
       });
       if (res.ok) {
-        toast({ title: 'Section saved!', variant: 'default' });
+        toast({ title: 'Section saved! 🎉', description: `Changes to ${sectionLabels[editingSection.sectionKey]?.label || editingSection.sectionKey} published.` });
         setSections(prev =>
-          prev.map(s => s.sectionKey === editingSection.sectionKey ? editingSection : s)
+          prev.map(s => s.sectionKey === editingSection.sectionKey ? { ...editingSection, content: processedContent } : s)
         );
         setEditingSection(null);
+      } else {
+        const data = await res.json();
+        throw new Error(data.error || 'Failed to save');
       }
-    } catch {
-      toast({ title: 'Error', variant: 'destructive' });
+    } catch (err: any) {
+      toast({ title: 'Error', description: err.message, variant: 'destructive' });
     } finally {
       setSaving(false);
     }
@@ -165,16 +185,42 @@ export default function AdminHomepagePage() {
 
                 {/* Dynamic content editor */}
                 <div className="space-y-4">
-                  {Object.entries(editingSection.content as Record<string, string>).map(([key, value]) => {
-                    if (typeof value === 'object') return null; // Skip nested objects for now
+                  {Object.entries(editingSection.content as Record<string, any>).map(([key, value]) => {
                     const label = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                    const isObj = typeof value === 'object' && value !== null;
                     return (
                       <div key={key}>
-                        <label className="form-label mb-1.5 block capitalize">{label}</label>
-                        {key.includes('text') && value?.length > 80 ? (
+                        <div className="flex items-center justify-between mb-1.5">
+                          <label className="form-label block capitalize font-medium text-xs">{label}</label>
+                          {isObj && (
+                            <span className="text-[10px] text-muted-foreground font-mono bg-muted px-1.5 py-0.5 rounded">
+                              JSON Array / Object
+                            </span>
+                          )}
+                        </div>
+                        {isObj ? (
+                          <textarea
+                            className="form-input font-mono text-xs h-36 resize-y bg-slate-50"
+                            value={typeof value === 'string' ? value : JSON.stringify(value, null, 2)}
+                            onChange={e => {
+                              try {
+                                const parsed = JSON.parse(e.target.value);
+                                setEditingSection(prev => prev ? {
+                                  ...prev,
+                                  content: { ...prev.content, [key]: parsed },
+                                } : null);
+                              } catch {
+                                setEditingSection(prev => prev ? {
+                                  ...prev,
+                                  content: { ...prev.content, [key]: e.target.value },
+                                } : null);
+                              }
+                            }}
+                          />
+                        ) : key.includes('text') && String(value || '').length > 80 ? (
                           <textarea
                             className="form-input h-24 resize-none"
-                            value={value}
+                            value={String(value || '')}
                             onChange={e => setEditingSection(prev => prev ? {
                               ...prev,
                               content: { ...prev.content, [key]: e.target.value },
@@ -184,7 +230,7 @@ export default function AdminHomepagePage() {
                           <input
                             type="text"
                             className="form-input"
-                            value={value || ''}
+                            value={String(value || '')}
                             onChange={e => setEditingSection(prev => prev ? {
                               ...prev,
                               content: { ...prev.content, [key]: e.target.value },
