@@ -29,7 +29,7 @@ export function PublicHeader({ menu, settings }: PublicHeaderProps) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const pathname = usePathname();
-  const { user, isLoggedIn, dashboardUrl, mounted, logout } = useAuth();
+  const { user, isLoggedIn, isLoading, dashboardUrl, mounted, logout } = useAuth();
 
   const siteName = settings['site_name'] || 'CyberMate Solutions';
   const logoUrl = settings['logo_url'];
@@ -174,7 +174,13 @@ export function PublicHeader({ menu, settings }: PublicHeaderProps) {
               </a>
             )}
 
-            {mounted && isLoggedIn ? (
+            {!mounted || isLoading ? (
+              /* Loading skeleton - prevents flash of wrong buttons */
+              <div className="flex items-center gap-2.5 animate-pulse">
+                <div className={cn("h-8 w-24 rounded-xl", isDarkHeader ? "bg-white/10" : "bg-secondary")} />
+                <div className={cn("h-8 w-20 rounded-xl", isDarkHeader ? "bg-white/10" : "bg-secondary")} />
+              </div>
+            ) : isLoggedIn ? (
               <div className="flex items-center gap-2.5">
                 <Button
                   variant="gradient"
@@ -337,7 +343,9 @@ export function PublicHeader({ menu, settings }: PublicHeaderProps) {
           </div>
 
           <div className="pt-4 mt-2 border-t border-border flex flex-col gap-2.5">
-            {mounted && isLoggedIn ? (
+            {!mounted || isLoading ? (
+              <div className="animate-pulse h-14 bg-secondary rounded-2xl border border-border" />
+            ) : isLoggedIn ? (
               <>
                 <div className="flex items-center gap-3 p-3 bg-secondary/70 rounded-2xl border border-border">
                   {user?.avatar ? (
