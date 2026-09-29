@@ -13,6 +13,8 @@ export const metadata: Metadata = {
   description: 'Browse all our premium online courses for Classes 6-12, JEE and NEET preparation.',
 };
 
+export const revalidate = 60;
+
 interface SearchParams {
   category?: string;
   grade?: string;

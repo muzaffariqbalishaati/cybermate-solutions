@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { toast } from '@/hooks/use-toast';
+import { StudentMobileBottomNav } from '@/components/navigation/student-mobile-bottom-nav';
 
 const navItems = [
   { href: '/student', label: 'Dashboard', icon: LayoutDashboard, exact: true },
@@ -160,9 +161,11 @@ export function StudentLayout({ children, unreadNotifications = 0 }: StudentLayo
         </header>
 
         {/* Content */}
-        <main className="flex-1 overflow-auto bg-muted/20">
+        <main className="flex-1 overflow-auto bg-muted/20 pb-16 lg:pb-0">
           {children}
         </main>
+        {/* Android style bottom navigation bar for students */}
+        <StudentMobileBottomNav />
       </div>
     </div>
   );

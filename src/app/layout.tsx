@@ -8,7 +8,12 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  themeColor: '#2563eb',
+  userScalable: true,
+  viewportFit: 'cover',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#4f46e5' },
+    { media: '(prefers-color-scheme: dark)', color: '#090d16' },
+  ],
 };
 
 const inter = Inter({
@@ -24,6 +29,16 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
+  applicationName: 'CyberMate Solutions',
+  manifest: '/manifest.webmanifest',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'CyberMate Solutions',
+  },
+  formatDetection: {
+    telephone: true,
+  },
   title: {
     default: 'CyberMate Solutions - Premium Online Tuition Platform',
     template: '%s | CyberMate Solutions',

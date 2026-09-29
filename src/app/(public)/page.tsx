@@ -18,6 +18,9 @@ import {
   fallbackFAQs,
 } from '@/lib/mock-data';
 
+// Fast real-time caching: ISR with 60s background refresh
+export const revalidate = 60;
+
 async function getHomepageData() {
   try {
     const [sections, featuredCourses, categories, testimonials, faqs, teachers] = await Promise.all([

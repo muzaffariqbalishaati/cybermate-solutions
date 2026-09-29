@@ -26,7 +26,7 @@ export function HeroSection({ section }: HeroSectionProps) {
 
   return (
     <section
-      className="relative min-h-[92vh] flex items-center overflow-hidden bg-slate-950"
+      className="relative min-h-[82vh] sm:min-h-[90vh] flex items-center overflow-hidden bg-slate-950"
       style={{
         background: bgImage
           ? `url(${bgImage}) center/cover no-repeat`
@@ -38,19 +38,19 @@ export function HeroSection({ section }: HeroSectionProps) {
       <div className="absolute bottom-10 right-10 h-96 w-96 rounded-full bg-purple-500/15 blur-3xl pointer-events-none" />
       <div className="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
 
-      <div className="section-container relative z-10 py-16 lg:py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <div className="section-container relative z-10 py-10 sm:py-16 lg:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Column - Content */}
-          <div className="lg:col-span-7 space-y-6">
+          <div className="lg:col-span-7 space-y-5 sm:space-y-6">
             {/* Trust Badge */}
-            <div className="inline-flex items-center gap-2.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 px-4 py-2 text-sm text-brand-200 shadow-sm">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-md border border-white/15 px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm text-brand-200 shadow-sm">
               <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
-              <Star className="h-4 w-4 text-amber-400 fill-amber-400" />
+              <Star className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber-400 fill-amber-400" />
               <span className="font-semibold tracking-wide text-white">{highlightText}</span>
             </div>
 
             {/* Headline */}
-            <h1 className="text-4xl sm:text-6xl lg:text-6xl font-heading font-black text-white leading-[1.1] tracking-tight">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-heading font-black text-white leading-[1.15] sm:leading-[1.1] tracking-tight">
               {headline.includes('Best') ? (
                 <>
                   {headline.split('Best')[0]}
@@ -65,19 +65,19 @@ export function HeroSection({ section }: HeroSectionProps) {
             </h1>
 
             {/* Sub-headline */}
-            <p className="text-lg sm:text-xl text-slate-300 leading-relaxed max-w-2xl font-normal">
+            <p className="text-base sm:text-lg lg:text-xl text-slate-300 leading-relaxed max-w-2xl font-normal">
               {subheadline}
             </p>
 
             {/* CTAs */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
-              <Button size="xl" variant="gradient" asChild className="group shadow-xl shadow-brand-500/25 px-8">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-2">
+              <Button size="xl" variant="gradient" asChild className="group shadow-xl shadow-brand-500/25 px-8 w-full sm:w-auto justify-center text-center app-tap">
                 <Link href={ctaUrl}>
                   {ctaText}
                   <ArrowRight className="h-5 w-5 ml-1 group-hover:translate-x-1.5 transition-transform" />
                 </Link>
               </Button>
-              <Button size="xl" variant="outline" asChild className="border-white/30 text-white bg-white/5 hover:bg-white/15 backdrop-blur-sm group px-6">
+              <Button size="xl" variant="outline" asChild className="border-white/30 text-white bg-white/5 hover:bg-white/15 backdrop-blur-sm group px-6 w-full sm:w-auto justify-center text-center app-tap">
                 <Link href={demoUrl}>
                   <Play className="h-4 w-4 mr-1 text-brand-300 fill-brand-300 group-hover:scale-110 transition-transform" />
                   {demoCta}

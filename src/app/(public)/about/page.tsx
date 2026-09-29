@@ -13,6 +13,8 @@ export const metadata: Metadata = {
   description: "Learn about CyberMate Solutions' mission, expert faculty, and proven methodology for academic excellence.",
 };
 
+export const revalidate = 60;
+
 const stats = [
   { value: '50,000+', label: 'Active Students', icon: Users },
   { value: '98.4%', label: 'Board Exam Pass Rate', icon: TrendingUp },

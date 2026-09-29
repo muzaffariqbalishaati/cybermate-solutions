@@ -194,43 +194,52 @@ export function PublicHeader({ menu, settings }: PublicHeaderProps) {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay & Drawer */}
       {isMobileOpen && (
-        <div className="lg:hidden border-t bg-background shadow-lg">
-          <div className="section-container py-4 space-y-1">
-            {navItems.map(item => (
-              <div key={item.id}>
-                <Link
-                  href={item.url || '#'}
-                  className={cn(
-                    'block px-4 py-3 rounded-lg text-sm font-medium transition-colors',
-                    pathname === item.url
-                      ? 'text-primary bg-primary/10'
-                      : 'text-foreground/80 hover:text-foreground hover:bg-secondary'
-                  )}
-                  onClick={() => setIsMobileOpen(false)}
-                >
-                  {item.label}
-                </Link>
-                {item.children?.map(child => (
+        <div className="lg:hidden fixed inset-0 top-16 z-50 flex flex-col">
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 top-16 bg-slate-950/60 backdrop-blur-sm transition-opacity animate-in fade-in duration-200"
+            onClick={() => setIsMobileOpen(false)}
+          />
+          {/* Drawer content */}
+          <div className="relative z-10 bg-background/98 backdrop-blur-xl border-b border-border shadow-2xl max-h-[calc(100vh-5rem)] overflow-y-auto animate-in slide-in-from-top-2 duration-200 pb-6">
+            <div className="section-container py-4 space-y-1.5">
+              {navItems.map(item => (
+                <div key={item.id}>
                   <Link
-                    key={child.id}
-                    href={child.url || '#'}
-                    className="block pl-8 py-2.5 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary rounded-lg transition-colors"
+                    href={item.url || '#'}
+                    className={cn(
+                      'flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all app-tap',
+                      pathname === item.url
+                        ? 'text-primary bg-primary/10 shadow-sm'
+                        : 'text-foreground/80 hover:text-foreground hover:bg-secondary/70'
+                    )}
                     onClick={() => setIsMobileOpen(false)}
                   >
-                    {child.label}
+                    <span>{item.label}</span>
+                    <span className="text-xs text-muted-foreground/60">→</span>
                   </Link>
-                ))}
+                  {item.children?.map(child => (
+                    <Link
+                      key={child.id}
+                      href={child.url || '#'}
+                      className="block pl-8 py-2.5 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-xl transition-colors app-tap"
+                      onClick={() => setIsMobileOpen(false)}
+                    >
+                      {child.label}
+                    </Link>
+                  ))}
+                </div>
+              ))}
+              <div className="pt-4 border-t border-border flex flex-col gap-2.5">
+                <Button variant="outline" className="w-full h-11 text-sm font-bold rounded-xl app-tap" asChild>
+                  <Link href="/login" onClick={() => setIsMobileOpen(false)}>{loginBtnText}</Link>
+                </Button>
+                <Button variant="gradient" className="w-full h-11 text-sm font-bold rounded-xl shadow-md shadow-brand-500/20 app-tap" asChild>
+                  <Link href="/register" onClick={() => setIsMobileOpen(false)}>{signupBtnText}</Link>
+                </Button>
               </div>
-            ))}
-            <div className="pt-3 border-t flex flex-col gap-2">
-              <Button variant="outline" className="w-full" asChild>
-                <Link href="/login" onClick={() => setIsMobileOpen(false)}>{loginBtnText}</Link>
-              </Button>
-              <Button variant="gradient" className="w-full" asChild>
-                <Link href="/register" onClick={() => setIsMobileOpen(false)}>{signupBtnText}</Link>
-              </Button>
             </div>
           </div>
         </div>
