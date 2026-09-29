@@ -132,6 +132,7 @@ export function PublicHeader({ menu, settings }: PublicHeaderProps) {
                 ) : (
                   <Link
                     href={item.url || '#'}
+                    prefetch={true}
                     className={cn(
                       'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
                       pathname === item.url
@@ -217,6 +218,7 @@ export function PublicHeader({ menu, settings }: PublicHeaderProps) {
               <div key={item.id}>
                 <Link
                   href={item.url || '#'}
+                  prefetch={true}
                   className={cn(
                     'flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all app-tap',
                     pathname === item.url
@@ -232,6 +234,7 @@ export function PublicHeader({ menu, settings }: PublicHeaderProps) {
                   <Link
                     key={child.id}
                     href={child.url || '#'}
+                    prefetch={true}
                     className="block pl-8 py-2.5 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-xl transition-colors app-tap"
                     onClick={() => setIsMobileOpen(false)}
                   >

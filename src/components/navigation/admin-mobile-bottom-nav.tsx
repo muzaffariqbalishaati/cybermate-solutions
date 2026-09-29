@@ -58,6 +58,7 @@ export function AdminMobileBottomNav() {
             <Link
               key={item.href}
               href={item.href}
+              prefetch={true}
               className={cn(
                 'relative flex flex-col items-center justify-center py-1 px-1 rounded-2xl transition-all duration-200 app-tap select-none group',
                 isActive

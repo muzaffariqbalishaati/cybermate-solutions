@@ -59,6 +59,7 @@ export function StudentMobileBottomNav() {
             <Link
               key={item.href}
               href={item.href}
+              prefetch={true}
               className={cn(
                 'group relative flex flex-col items-center justify-center py-1 rounded-xl transition-all duration-150 select-none active:scale-95',
                 isActive ? 'text-primary font-bold' : 'text-muted-foreground hover:text-foreground font-medium'

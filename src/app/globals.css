@@ -69,6 +69,18 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading;
   }
+
+  /* Instant zero-delay touch feedback for all links and buttons */
+  a, button, [role="button"], input[type="submit"], input[type="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  a:active, button:active, [role="button"]:active {
+    transform: scale(0.975);
+    opacity: 0.92;
+    transition: transform 60ms ease-out, opacity 60ms ease-out;
+  }
 }
 
 @layer components {

@@ -78,6 +78,9 @@ export const metadata: Metadata = {
   },
 };
 
+import { Suspense } from 'react';
+import { NavigationProgress } from '@/components/navigation/navigation-progress';
+
 export default function RootLayout({
   children,
 }: {
@@ -87,6 +90,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head />
       <body className={`${inter.variable} ${outfit.variable} font-sans antialiased`}>
+        <Suspense fallback={null}>
+          <NavigationProgress />
+        </Suspense>
         <Providers>
           {children}
           <Toaster />

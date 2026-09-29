@@ -2,66 +2,52 @@ import { PublicHeader } from '@/components/layouts/public-header';
 import { PublicFooter } from '@/components/layouts/public-footer';
 import { MobileBottomNav } from '@/components/navigation/mobile-bottom-nav';
 import prisma from '@/lib/prisma';
+import { unstable_cache } from 'next/cache';
 
-let cachedLayoutData: {
-  headerMenu: any;
-  footerMenu: any;
-  settingsMap: Record<string, string | null>;
-  timestamp: number;
-} | null = null;
-
-const CACHE_TTL_MS = 60 * 1000; // 60 seconds
-
-async function getLayoutData() {
-  const now = Date.now();
-  if (cachedLayoutData && now - cachedLayoutData.timestamp < CACHE_TTL_MS) {
-    return cachedLayoutData;
-  }
-
-  try {
-    const [headerMenu, footerMenu, settings] = await Promise.all([
-      prisma.menu.findUnique({
-        where: { location: 'header' },
-        include: {
-          items: {
-            where: { parentId: null, isActive: true },
-            orderBy: { order: 'asc' },
-            include: {
-              children: {
-                where: { isActive: true },
-                orderBy: { order: 'asc' },
+const getLayoutData = unstable_cache(
+  async () => {
+    try {
+      const [headerMenu, footerMenu, settings] = await Promise.all([
+        prisma.menu.findUnique({
+          where: { location: 'header' },
+          include: {
+            items: {
+              where: { parentId: null, isActive: true },
+              orderBy: { order: 'asc' },
+              include: {
+                children: {
+                  where: { isActive: true },
+                  orderBy: { order: 'asc' },
+                },
               },
             },
           },
-        },
-      }),
-      prisma.menu.findUnique({
-        where: { location: 'footer' },
-        include: {
-          items: {
-            where: { isActive: true },
-            orderBy: { order: 'asc' },
+        }),
+        prisma.menu.findUnique({
+          where: { location: 'footer' },
+          include: {
+            items: {
+              where: { isActive: true },
+              orderBy: { order: 'asc' },
+            },
           },
-        },
-      }),
-      prisma.siteSetting.findMany(),
-    ]);
+        }),
+        prisma.siteSetting.findMany(),
+      ]);
 
-    const settingsMap = Object.fromEntries(settings.map(s => [s.key, s.value]));
-
-    const data = { headerMenu, footerMenu, settingsMap, timestamp: now };
-    cachedLayoutData = data;
-    return data;
-  } catch {
-    if (cachedLayoutData) return cachedLayoutData;
-    return {
-      headerMenu: null,
-      footerMenu: null,
-      settingsMap: { site_name: 'CyberMate Solutions' },
-      timestamp: now,
-    };
-  }
-}
+      const settingsMap = Object.fromEntries(settings.map(s => [s.key, s.value]));
+      return { headerMenu, footerMenu, settingsMap };
+    } catch {
+      return {
+        headerMenu: null,
+        footerMenu: null,
+        settingsMap: { site_name: 'CyberMate Solutions' },
+      };
+    }
+  },
+  ['public-layout-data-v2'],
+  { revalidate: 300, tags: ['site-settings', 'menus'] }
+);
 
 export async function PublicLayout({ children }: { children: React.ReactNode }) {
   const { headerMenu, footerMenu, settingsMap } = await getLayoutData();

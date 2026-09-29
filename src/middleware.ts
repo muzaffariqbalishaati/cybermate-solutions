@@ -2,25 +2,6 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { verifyToken } from '@/lib/auth';
 
-// Define route protection rules
-const PUBLIC_ROUTES = [
-  '/',
-  '/courses',
-  '/about',
-  '/contact',
-  '/faq',
-  '/login',
-  '/register',
-  '/forgot-password',
-  '/reset-password',
-  '/resources',
-  '/demo',
-  '/terms',
-  '/privacy',
-  '/refund-policy',
-  '/verify',
-];
-
 const ADMIN_ROUTES = ['/admin'];
 const TEACHER_ROUTES = ['/teacher'];
 const STUDENT_ROUTES = ['/student'];
@@ -29,35 +10,14 @@ const PARENT_ROUTES = ['/parent'];
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Skip public assets and API routes (APIs handle their own auth)
-  if (
-    pathname.startsWith('/_next') ||
-    pathname.startsWith('/static') ||
-    pathname.startsWith('/favicon') ||
-    pathname.startsWith('/uploads') ||
-    pathname.includes('.')
-  ) {
-    return NextResponse.next();
-  }
-
-  // Allow API routes to handle their own authentication
+  // Allow API routes to handle their own authentication and add security headers
   if (pathname.startsWith('/api')) {
     const response = NextResponse.next();
-    // Add security headers
     response.headers.set('X-Content-Type-Options', 'nosniff');
     response.headers.set('X-Frame-Options', 'DENY');
     response.headers.set('X-XSS-Protection', '1; mode=block');
     response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
     return response;
-  }
-
-  // Check if it's a public route
-  const isPublicRoute = PUBLIC_ROUTES.some(route =>
-    pathname === route || pathname.startsWith(`${route}/`)
-  ) || pathname.startsWith('/courses/') || pathname.startsWith('/pages/');
-
-  if (isPublicRoute) {
-    return NextResponse.next();
   }
 
   // Get auth token
@@ -114,8 +74,13 @@ export async function middleware(request: NextRequest) {
   return response;
 }
 
+// Only run middleware on protected portals & APIs. Public pages load instantly with 0ms edge middleware overhead!
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico).*)',
+    '/admin/:path*',
+    '/teacher/:path*',
+    '/student/:path*',
+    '/parent/:path*',
+    '/api/:path*',
   ],
 };
