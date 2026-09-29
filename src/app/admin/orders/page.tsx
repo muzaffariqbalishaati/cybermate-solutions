@@ -99,7 +99,7 @@ export default function AdminOrdersPage() {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `EduPro_Orders_Ledger_${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute('download', `CyberMate_Orders_Ledger_${new Date().toISOString().split('T')[0]}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

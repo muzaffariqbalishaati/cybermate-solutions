@@ -186,7 +186,7 @@ export default function AdminCouponsPage() {
                   <label className="text-xs font-semibold text-slate-700">Promo Code *</label>
                   <Input
                     required
-                    placeholder="e.g. EDUPRO20 or FESTIVE50"
+                    placeholder="e.g. CYBERMATE20 or FESTIVE50"
                     className="font-mono uppercase text-xs h-10"
                     value={code}
                     onChange={e => setCode(e.target.value.toUpperCase())}

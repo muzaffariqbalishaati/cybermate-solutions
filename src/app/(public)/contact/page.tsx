@@ -102,8 +102,8 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <p className="text-xs font-semibold text-slate-400">Email Inquiries</p>
-                      <p className="text-base font-bold text-slate-900">support@edupro.com</p>
-                      <p className="text-xs text-slate-500">admissions@edupro.com</p>
+                      <p className="text-base font-bold text-slate-900">support@cybermatesolutions.com</p>
+                      <p className="text-xs text-slate-500">admissions@cybermatesolutions.com</p>
                     </div>
                   </div>
 
@@ -114,7 +114,7 @@ export default function ContactPage() {
                     <div>
                       <p className="text-xs font-semibold text-slate-400">Headquarters</p>
                       <p className="text-sm font-semibold text-slate-900 leading-snug">
-                        EduPro Knowledge Park, Sector 62, Noida, NCR Delhi 201301
+                        CyberMate Solutions Knowledge Park, Sector 62, Noida, NCR Delhi 201301
                       </p>
                     </div>
                   </div>

@@ -34,7 +34,7 @@ export default function VerifyPortalPage() {
               Official Certificate Verification Portal
             </h1>
             <p className="text-slate-600 text-base max-w-xl mx-auto">
-              Verify the authenticity of graduation credentials and certificates issued by EduPro Learning Platform.
+              Verify the authenticity of graduation credentials and certificates issued by CyberMate Solutions.
             </p>
           </div>
 

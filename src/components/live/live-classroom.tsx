@@ -52,7 +52,7 @@ export function LiveClassroom({
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Generate safe deterministic room name for Jitsi WebRTC
-  const sanitizedRoom = `EduPro_${classId.replace(/[^a-zA-Z0-9]/g, '_')}`;
+  const sanitizedRoom = `CyberMateSolutions_${classId.replace(/[^a-zA-Z0-9]/g, '_')}`;
   
   // Jitsi Meet Embed URL with configurations
   const jitsiUrl = `https://meet.jit.si/${sanitizedRoom}#userInfo.displayName=${encodeURIComponent(

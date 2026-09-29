@@ -11,7 +11,7 @@ export function WhyChooseUsSection({ section }: WhyChooseUsSectionProps) {
   if (section && !section.isVisible) return null;
 
   const content = (section?.content as Record<string, unknown>) || {};
-  const heading = (content.heading as string) || 'Why Choose EduPro?';
+  const heading = (content.heading as string) || 'Why Choose CyberMate Solutions?';
   const subheading = (content.subheading as string) || 'We provide the best learning experience for students across India';
   const features = (content.features as Array<{ title: string; description: string; icon: string }>) || [
     { title: 'Expert Teachers', description: 'Learn from experienced educators with proven track records', icon: 'award' },

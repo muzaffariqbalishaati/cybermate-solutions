@@ -147,7 +147,7 @@ function LoginForm() {
               <div className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs text-muted-foreground">
-              <span className="bg-background px-2">New to EduPro?</span>
+              <span className="bg-background px-2">New to CyberMate Solutions?</span>
             </div>
           </div>
 
@@ -159,9 +159,9 @@ function LoginForm() {
           <div className="rounded-xl bg-muted/50 border border-border p-4 text-xs text-muted-foreground">
             <p className="font-semibold text-foreground mb-2">Demo Credentials:</p>
             <div className="space-y-1">
-              <p>Admin: <span className="font-mono text-primary">admin@edupro.com</span> / <span className="font-mono">Admin@123</span></p>
-              <p>Student: <span className="font-mono text-primary">student@edupro.com</span> / <span className="font-mono">Student@123</span></p>
-              <p>Teacher: <span className="font-mono text-primary">teacher@edupro.com</span> / <span className="font-mono">Teacher@123</span></p>
+              <p>Admin: <span className="font-mono text-primary">admin@cybermatesolutions.com</span> / <span className="font-mono">Admin@123</span></p>
+              <p>Student: <span className="font-mono text-primary">student@cybermatesolutions.com</span> / <span className="font-mono">Student@123</span></p>
+              <p>Teacher: <span className="font-mono text-primary">teacher@cybermatesolutions.com</span> / <span className="font-mono">Teacher@123</span></p>
             </div>
           </div>
         </div>

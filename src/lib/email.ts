@@ -43,7 +43,7 @@ export async function sendEmail(options: EmailOptions): Promise<void> {
 
     const transporter = createTransporter();
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'EduPro <noreply@edupro.com>',
+      from: process.env.EMAIL_FROM || 'CyberMate Solutions <noreply@cybermatesolutions.com>',
       to: `${options.toName ? `"${options.toName}" ` : ''}<${options.to}>`,
       subject: options.subject,
       html: options.html,
@@ -82,7 +82,7 @@ export async function sendTemplateEmail(
 export async function sendWelcomeEmail(email: string, name: string): Promise<void> {
   await sendTemplateEmail('welcome', email, name, {
     student_name: name,
-    platform_name: process.env.NEXT_PUBLIC_APP_NAME || 'EduPro',
+    platform_name: process.env.NEXT_PUBLIC_APP_NAME || 'CyberMate Solutions',
     login_url: `${process.env.NEXT_PUBLIC_APP_URL}/login`,
   });
 }
@@ -91,7 +91,7 @@ export async function sendPasswordResetEmail(email: string, name: string, resetU
   await sendTemplateEmail('password_reset', email, name, {
     student_name: name,
     reset_url: resetUrl,
-    platform_name: process.env.NEXT_PUBLIC_APP_NAME || 'EduPro',
+    platform_name: process.env.NEXT_PUBLIC_APP_NAME || 'CyberMate Solutions',
   });
 }
 
@@ -105,7 +105,7 @@ export async function sendCourseEnrollmentEmail(
     student_name: name,
     course_name: courseName,
     course_link: courseLink,
-    platform_name: process.env.NEXT_PUBLIC_APP_NAME || 'EduPro',
+    platform_name: process.env.NEXT_PUBLIC_APP_NAME || 'CyberMate Solutions',
   });
 }
 
@@ -119,7 +119,7 @@ export async function sendPaymentConfirmationEmail(
     student_name: name,
     invoice_number: invoiceNumber,
     amount,
-    platform_name: process.env.NEXT_PUBLIC_APP_NAME || 'EduPro',
+    platform_name: process.env.NEXT_PUBLIC_APP_NAME || 'CyberMate Solutions',
   });
 }
 
@@ -135,6 +135,6 @@ export async function sendLiveClassReminderEmail(
     class_name: className,
     class_time: classTime,
     join_url: joinUrl,
-    platform_name: process.env.NEXT_PUBLIC_APP_NAME || 'EduPro',
+    platform_name: process.env.NEXT_PUBLIC_APP_NAME || 'CyberMate Solutions',
   });
 }

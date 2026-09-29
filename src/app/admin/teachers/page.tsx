@@ -206,7 +206,7 @@ export default function AdminTeachersPage() {
                   <Input
                     required
                     type="email"
-                    placeholder="faculty@edupro.com"
+                    placeholder="faculty@cybermatesolutions.com"
                     className="text-xs h-10"
                     value={email}
                     onChange={e => setEmail(e.target.value)}

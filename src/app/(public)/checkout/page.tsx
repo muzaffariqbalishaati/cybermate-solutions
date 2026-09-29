@@ -47,7 +47,7 @@ function CheckoutForm() {
     }
 
     const code = couponCode.trim().toUpperCase();
-    if (code === 'EDUPRO50' || code === 'FIRST50') {
+    if (code === 'CYBERMATE50' || code === 'FIRST50') {
       const discount = Math.round(basePrice * 0.5);
       setCouponApplied({ code, discount });
       toast({
@@ -61,7 +61,7 @@ function CheckoutForm() {
         description: `Flat ${formatCurrency(500)} off applied`,
       });
     } else {
-      setCouponError('Invalid or expired coupon code. Try EDUPRO50');
+      setCouponError('Invalid or expired coupon code. Try CYBERMATE50');
     }
   };
 
@@ -102,7 +102,7 @@ function CheckoutForm() {
 
       toast({
         title: 'Enrollment Successful! 🎉',
-        description: 'Welcome to EduPro! Your course access is activated.',
+        description: 'Welcome to CyberMate Solutions! Your course access is activated.',
       });
 
       window.location.href = '/student/courses?enrolled=success';
@@ -273,7 +273,7 @@ function CheckoutForm() {
                 <ShieldCheck className="w-8 h-8 text-emerald-600 flex-shrink-0" />
                 <div>
                   <h3 className="font-bold text-emerald-950 text-sm">
-                    EduPro 100% Risk-Free Guarantee
+                    CyberMate Solutions 100% Risk-Free Guarantee
                   </h3>
                   <p className="text-xs text-emerald-800 leading-relaxed mt-1">
                     Try the classes for a full 7 days. If you're not completely satisfied with our teachers and doubt support, let us know for a prompt 100% refund. No questions asked.
@@ -332,7 +332,7 @@ function CheckoutForm() {
                   ) : (
                     <div className="flex gap-2">
                       <Input
-                        placeholder="e.g. EDUPRO50"
+                        placeholder="e.g. CYBERMATE50"
                         className="uppercase text-xs tracking-wider"
                         value={couponCode}
                         onChange={e => setCouponCode(e.target.value)}
@@ -353,7 +353,7 @@ function CheckoutForm() {
                   )}
 
                   <p className="text-[11px] text-slate-400">
-                    💡 Tip: Try code <span className="font-bold text-brand-600">EDUPRO50</span> for 50% off
+                    💡 Tip: Try code <span className="font-bold text-brand-600">CYBERMATE50</span> for 50% off
                   </p>
                 </div>
 
@@ -407,7 +407,7 @@ function CheckoutForm() {
                 </Button>
 
                 <p className="text-center text-[11px] text-slate-400">
-                  By completing order, you agree to EduPro's Terms of Service and Privacy Policy.
+                  By completing order, you agree to CyberMate Solutions' Terms of Service and Privacy Policy.
                 </p>
               </div>
 

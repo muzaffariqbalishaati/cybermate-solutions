@@ -9,8 +9,8 @@ import { Button } from '@/components/ui/button';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'About Us | EduPro Learning Platform',
-  description: "Learn about EduPro's mission, expert faculty, and proven methodology for academic excellence.",
+  title: 'About Us | CyberMate Solutions',
+  description: "Learn about CyberMate Solutions' mission, expert faculty, and proven methodology for academic excellence.",
 };
 
 const stats = [
@@ -89,7 +89,7 @@ export default function AboutPage() {
             Empowering Every Student to Reach Their Peak Potential
           </h1>
           <p className="text-lg sm:text-xl text-slate-300 leading-relaxed max-w-3xl mx-auto">
-            EduPro is India's leading interactive tuition ecosystem. We combine India’s top educators, live interactive pedagogy, and adaptive testing to deliver consistent top ranks.
+            CyberMate Solutions is India's leading interactive tuition ecosystem. We combine India’s top educators, live interactive pedagogy, and adaptive testing to deliver consistent top ranks.
           </p>
           <div className="pt-4 flex flex-wrap justify-center gap-4">
             <Link href="/courses">
@@ -140,7 +140,7 @@ export default function AboutPage() {
                 Democratizing Quality Mentorship for Classes 6 to 12 & Competitive Exams
               </h2>
               <p className="text-slate-600 leading-relaxed">
-                Founded by educators from premier institutions, EduPro was born out of a simple observation: geographic distance and exorbitant coaching fees shouldn't dictate a child's academic destiny.
+                Founded by educators from premier institutions, CyberMate Solutions was born out of a simple observation: geographic distance and exorbitant coaching fees shouldn't dictate a child's academic destiny.
               </p>
               <p className="text-slate-600 leading-relaxed">
                 We engineered a platform where live two-way audio/video sessions, instantaneous doubt clearing, and continuous performance tracking give every student the same unfair advantage that previously only elite coaching hubs provided.
@@ -187,7 +187,7 @@ export default function AboutPage() {
               Our Principles
             </span>
             <h2 className="text-3xl sm:text-4xl font-heading font-bold text-slate-900">
-              The Pillars of the EduPro Philosophy
+              The Pillars of the CyberMate Solutions Philosophy
             </h2>
           </div>
 

@@ -32,7 +32,7 @@ export default function ParentReportsPage() {
               Official Academic Report Card
             </h1>
             <p className="text-slate-500 text-sm mt-1">
-              Terminal performance scorecard issued by EduPro Academic Board
+              Terminal performance scorecard issued by CyberMate Solutions Academic Board
             </p>
           </div>
 
@@ -53,7 +53,7 @@ export default function ParentReportsPage() {
           {/* Institution Header */}
           <div className="text-center pb-6 border-b space-y-2">
             <h2 className="text-2xl sm:text-3xl font-heading font-black text-slate-900">
-              EduPro Learning Foundation
+              CyberMate Solutions Learning Foundation
             </h2>
             <p className="text-xs uppercase tracking-widest text-purple-600 font-bold">
               Formal Student Progress Evaluation
@@ -117,7 +117,7 @@ export default function ParentReportsPage() {
             </div>
             <div className="flex items-center gap-1.5 text-xs font-bold text-purple-800">
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              Eligible for EduPro Merit Scholar Certificate
+              Eligible for CyberMate Solutions Merit Scholar Certificate
             </div>
           </div>
 

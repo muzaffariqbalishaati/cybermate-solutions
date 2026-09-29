@@ -25,25 +25,25 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: {
-    default: 'EduPro - Premium Online Tuition Platform',
-    template: '%s | EduPro',
+    default: 'CyberMate Solutions - Premium Online Tuition Platform',
+    template: '%s | CyberMate Solutions',
   },
   description: 'India\'s premier online tuition platform. Access live classes, recorded lectures, tests, and more from expert teachers.',
   keywords: ['online tuition', 'online education', 'live classes', 'courses', 'India'],
-  authors: [{ name: 'EduPro Team' }],
-  creator: 'EduPro',
+  authors: [{ name: 'CyberMate Solutions Team' }],
+  creator: 'CyberMate Solutions',
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
   openGraph: {
     type: 'website',
     locale: 'en_IN',
     url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
-    siteName: 'EduPro',
-    title: 'EduPro - Premium Online Tuition Platform',
+    siteName: 'CyberMate Solutions',
+    title: 'CyberMate Solutions - Premium Online Tuition Platform',
     description: 'India\'s premier online tuition platform for students.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'EduPro - Premium Online Tuition Platform',
+    title: 'CyberMate Solutions - Premium Online Tuition Platform',
     description: 'India\'s premier online tuition platform for students.',
   },
   robots: {

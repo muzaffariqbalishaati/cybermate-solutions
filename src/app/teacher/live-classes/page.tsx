@@ -94,7 +94,7 @@ export default function TeacherLiveClassesPage() {
     setMeetingId('');
     toast({
       title: 'Class Scheduled! 📡',
-      description: `Class scheduled with ${meetingType === 'ZOOM' ? 'Zoom Integration' : 'EduPro WebRTC HD Studio'}.`,
+      description: `Class scheduled with ${meetingType === 'ZOOM' ? 'Zoom Integration' : 'CyberMate Solutions WebRTC HD Studio'}.`,
     });
   };
 
@@ -253,7 +253,7 @@ export default function TeacherLiveClassesPage() {
                     >
                       <div className="flex items-center gap-1.5 mb-1 text-brand-600">
                         <Radio className="w-3.5 h-3.5" />
-                        <span>EduPro WebRTC</span>
+                        <span>CyberMate WebRTC</span>
                       </div>
                       <p className="text-[10px] text-slate-500 font-normal">Built-in browser video studio</p>
                     </button>

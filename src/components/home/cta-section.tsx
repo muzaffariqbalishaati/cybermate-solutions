@@ -14,7 +14,7 @@ export function CTASection({ section }: CTASectionProps) {
 
   const content = (section?.content as Record<string, string>) || {};
   const heading = content.heading || 'Ready to Start Learning?';
-  const subheading = content.subheading || 'Join thousands of students already learning on EduPro. Start your free demo today!';
+  const subheading = content.subheading || 'Join thousands of students already learning on CyberMate Solutions. Start your free demo today!';
   const ctaText = content.cta_text || 'Start Learning Today';
   const ctaUrl = content.cta_url || '/register';
   const secondaryText = content.secondary_text || 'Explore Free Resources';

@@ -44,7 +44,7 @@ export default function RegisterPage() {
         return;
       }
 
-      toast({ title: 'Account Created!', description: 'Welcome to EduPro! You are now logged in.', variant: 'default' });
+      toast({ title: 'Account Created!', description: 'Welcome to CyberMate Solutions! You are now logged in.', variant: 'default' });
       window.location.href = '/student';
     } catch {
       toast({ title: 'Error', description: 'Something went wrong. Please try again.', variant: 'destructive' });

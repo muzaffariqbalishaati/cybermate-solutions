@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     if (existing) return successResponse(existing, 'Certificate already exists');
 
     const certificateNo = generateCertificateNumber();
-    const instructorName = course.teachers[0]?.teacher.name || 'EduPro Team';
+    const instructorName = course.teachers[0]?.teacher.name || 'CyberMate Solutions Team';
     const verifyUrl = `${process.env.NEXT_PUBLIC_APP_URL}/verify/${certificateNo}`;
 
     const certificate = await prisma.certificate.create({

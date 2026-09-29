@@ -122,7 +122,7 @@ Our top educators break down complex physics formulas, chemistry reactions, biol
       }
     ],
     faqs: [
-      { q: 'Can I access this course on both mobile and laptop?', a: 'Yes! EduPro works smoothly on all browsers, Windows, macOS, Android, and iOS devices with instant progress synchronization.' },
+      { q: 'Can I access this course on both mobile and laptop?', a: 'Yes! CyberMate Solutions works smoothly on all browsers, Windows, macOS, Android, and iOS devices with instant progress synchronization.' },
       { q: 'What happens if I miss a scheduled live class?', a: 'All live sessions are automatically recorded in Full HD and uploaded to your dashboard within 2 hours of completion for unlimited rewatching.' },
       { q: 'How does the 1-on-1 doubt clearing work?', a: 'You can submit doubts directly inside the lesson player via text or photo upload. Our subject teachers answer within 2 hours with step-by-step video or written solutions.' },
       { q: 'Is there a refund policy?', a: 'Yes, we offer a 100% money-back guarantee within 7 days of purchase if you are not completely satisfied with the course.' }
@@ -132,7 +132,7 @@ Our top educators break down complex physics formulas, chemistry reactions, biol
 
 export async function generateMetadata({ params }: CoursePageProps): Promise<Metadata> {
   return {
-    title: `${params.slug.replace(/-/g, ' ').toUpperCase()} | EduPro Courses`,
+    title: `${params.slug.replace(/-/g, ' ').toUpperCase()} | CyberMate Solutions Courses`,
     description: 'Enroll in premium online courses with live classes, study material, and doubt clearing.',
   };
 }

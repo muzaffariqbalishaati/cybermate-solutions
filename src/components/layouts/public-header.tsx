@@ -30,7 +30,7 @@ export function PublicHeader({ menu, settings }: PublicHeaderProps) {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const pathname = usePathname();
 
-  const siteName = settings['site_name'] || 'EduPro';
+  const siteName = settings['site_name'] || 'CyberMate Solutions';
   const logoUrl = settings['logo_url'];
   const phone = settings['phone'];
   const loginBtnText = settings['header_login_btn'] || 'Login';

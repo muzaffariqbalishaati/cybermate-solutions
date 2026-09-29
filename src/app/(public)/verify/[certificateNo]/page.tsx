@@ -33,7 +33,7 @@ export default async function CertificateResultPage({ params }: VerifyPageProps)
     courseTitle: dbCert?.course?.title || 'Class 10 Board Excellence - Mathematics & Science',
     issueDate: dbCert?.issuedAt ? formatDate(dbCert.issuedAt) : '15 March 2025',
     grade: 'A+ (94.2% Distinction)',
-    issuer: 'EduPro Learning Platform',
+    issuer: 'CyberMate Solutions',
     status: 'AUTHENTIC & VERIFIED',
   };
 
@@ -71,7 +71,7 @@ export default async function CertificateResultPage({ params }: VerifyPageProps)
                 <Award className="w-9 h-9" />
               </div>
               <h2 className="text-xs font-bold tracking-widest uppercase text-amber-700">
-                EduPro Learning Foundation
+                CyberMate Solutions Learning Foundation
               </h2>
               <h1 className="text-3xl sm:text-4xl font-serif font-bold text-slate-900">
                 Certificate of Academic Excellence
@@ -118,7 +118,7 @@ export default async function CertificateResultPage({ params }: VerifyPageProps)
 
               <div>
                 <p className="font-semibold text-slate-800">Academic Director</p>
-                <p className="text-[11px] text-slate-400 mt-0.5">EduPro Certification Board</p>
+                <p className="text-[11px] text-slate-400 mt-0.5">CyberMate Solutions Certification Board</p>
               </div>
             </div>
 

@@ -338,7 +338,7 @@ export const fallbackTestimonials: MockTestimonial[] = [
     name: 'Aarav Patel',
     avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&auto=format&fit=crop&q=80',
     designation: 'Class 12 Topper (Scored 98.2% CBSE)',
-    content: 'EduPro completely changed my preparation. Dr. Rajesh sir made rotational motion and electromagnetism feel effortless. The mock tests were identical to the actual board exam format!',
+    content: 'CyberMate Solutions completely changed my preparation. Dr. Rajesh sir made rotational motion and electromagnetism feel effortless. The mock tests were identical to the actual board exam format!',
     rating: 5,
   },
   {
@@ -386,7 +386,7 @@ export const fallbackTestimonials: MockTestimonial[] = [
 export const fallbackFAQs: MockFAQ[] = [
   {
     id: 'faq-1',
-    question: 'How do live online classes work on EduPro?',
+    question: 'How do live online classes work on CyberMate Solutions?',
     answer: 'Classes are streamed live in high-definition with two-way audio, interactive whiteboard presentations, live polls, and instant doubt-clearing. You can attend on any laptop, tablet, or smartphone.',
   },
   {
@@ -397,7 +397,7 @@ export const fallbackFAQs: MockFAQ[] = [
   {
     id: 'faq-3',
     question: 'How are doubts solved outside class hours?',
-    answer: 'EduPro features a 24/7 dedicated Doubt Forum. Simply snap a photo of your problem or type your query, and our subject experts provide verified step-by-step solutions, often with audio explanations.',
+    answer: 'CyberMate Solutions features a 24/7 dedicated Doubt Forum. Simply snap a photo of your problem or type your query, and our subject experts provide verified step-by-step solutions, often with audio explanations.',
   },
   {
     id: 'faq-4',

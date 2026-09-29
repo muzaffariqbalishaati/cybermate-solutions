@@ -10,7 +10,7 @@ import { toast } from '@/hooks/use-toast';
 export default function StudentProfilePage() {
   const [profile, setProfile] = useState({
     name: 'Aarav Sharma',
-    email: 'student@edupro.com',
+    email: 'student@cybermatesolutions.com',
     phone: '+91 98765 43210',
     grade: 'Class 10',
     school: 'Delhi Public School, R.K. Puram',

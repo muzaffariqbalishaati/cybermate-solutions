@@ -10,10 +10,10 @@ interface PublicFooterProps {
 }
 
 export function PublicFooter({ menu, settings }: PublicFooterProps) {
-  const siteName = settings['site_name'] || 'EduPro';
+  const siteName = settings['site_name'] || 'CyberMate Solutions';
   const logoUrl = settings['logo_url'];
   const aboutText = settings['footer_about'] || 'India\'s premier online tuition platform providing quality education to students across the country.';
-  const email = settings['contact_email'] || 'support@edupro.com';
+  const email = settings['contact_email'] || 'support@cybermatesolutions.com';
   const phone = settings['phone'] || '+91 98765 43210';
   const address = settings['address'] || 'New Delhi, India';
   const copyright = settings['copyright_text'] || `© ${new Date().getFullYear()} ${siteName}. All rights reserved.`;

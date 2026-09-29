@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Seeding EduPro database...\n');
+  console.log('🌱 Seeding CyberMate Solutions database...\n');
 
   // ========================
   // CLEAN EXISTING DATA (in reverse dependency order)
@@ -73,25 +73,25 @@ async function main() {
   // SITE SETTINGS
   // ========================
   const siteSettings = [
-    { key: 'site_name', value: 'EduPro', type: 'text', group: 'general', label: 'Site Name' },
+    { key: 'site_name', value: 'CyberMate Solutions', type: 'text', group: 'general', label: 'Site Name' },
     { key: 'logo_url', value: '', type: 'text', group: 'general', label: 'Logo URL' },
     { key: 'favicon_url', value: '/favicon.ico', type: 'text', group: 'general', label: 'Favicon' },
-    { key: 'contact_email', value: 'support@edupro.com', type: 'text', group: 'contact', label: 'Contact Email' },
+    { key: 'contact_email', value: 'support@cybermatesolutions.com', type: 'text', group: 'contact', label: 'Contact Email' },
     { key: 'phone', value: '+91 98765 43210', type: 'text', group: 'contact', label: 'Phone' },
     { key: 'whatsapp', value: '+91 98765 43210', type: 'text', group: 'contact', label: 'WhatsApp' },
     { key: 'address', value: 'New Delhi, India 110001', type: 'text', group: 'contact', label: 'Address' },
     { key: 'footer_about', value: "India's premier online tuition platform providing quality education to students across the country with expert teachers.", type: 'text', group: 'footer', label: 'Footer About Text' },
-    { key: 'social_facebook', value: 'https://facebook.com/edupro', type: 'text', group: 'social', label: 'Facebook URL' },
-    { key: 'social_instagram', value: 'https://instagram.com/edupro', type: 'text', group: 'social', label: 'Instagram URL' },
-    { key: 'social_youtube', value: 'https://youtube.com/@edupro', type: 'text', group: 'social', label: 'YouTube URL' },
-    { key: 'social_twitter', value: 'https://twitter.com/edupro', type: 'text', group: 'social', label: 'Twitter URL' },
-    { key: 'social_linkedin', value: 'https://linkedin.com/company/edupro', type: 'text', group: 'social', label: 'LinkedIn URL' },
-    { key: 'default_seo_title', value: 'EduPro - Premium Online Tuition Platform', type: 'text', group: 'seo', label: 'Default SEO Title' },
+    { key: 'social_facebook', value: 'https://facebook.com/cybermatesolutions', type: 'text', group: 'social', label: 'Facebook URL' },
+    { key: 'social_instagram', value: 'https://instagram.com/cybermatesolutions', type: 'text', group: 'social', label: 'Instagram URL' },
+    { key: 'social_youtube', value: 'https://youtube.com/@cybermatesolutions', type: 'text', group: 'social', label: 'YouTube URL' },
+    { key: 'social_twitter', value: 'https://twitter.com/cybermatesolutions', type: 'text', group: 'social', label: 'Twitter URL' },
+    { key: 'social_linkedin', value: 'https://linkedin.com/company/cybermatesolutions', type: 'text', group: 'social', label: 'LinkedIn URL' },
+    { key: 'default_seo_title', value: 'CyberMate Solutions - Premium Online Tuition Platform', type: 'text', group: 'seo', label: 'Default SEO Title' },
     { key: 'default_meta_desc', value: "India's premier online tuition platform for students.", type: 'text', group: 'seo', label: 'Default Meta Description' },
     { key: 'currency', value: 'INR', type: 'text', group: 'general', label: 'Currency' },
     { key: 'timezone', value: 'Asia/Kolkata', type: 'text', group: 'general', label: 'Timezone' },
     { key: 'maintenance_mode', value: 'false', type: 'boolean', group: 'general', label: 'Maintenance Mode' },
-    { key: 'copyright_text', value: `© ${new Date().getFullYear()} EduPro. All rights reserved.`, type: 'text', group: 'footer', label: 'Copyright Text' },
+    { key: 'copyright_text', value: `© ${new Date().getFullYear()} CyberMate Solutions. All rights reserved.`, type: 'text', group: 'footer', label: 'Copyright Text' },
     { key: 'header_login_btn', value: 'Login', type: 'text', group: 'header', label: 'Login Button Text' },
     { key: 'header_signup_btn', value: 'Join Free', type: 'text', group: 'header', label: 'Signup Button Text' },
   ];
@@ -169,7 +169,7 @@ async function main() {
       sectionKey: 'why_choose_us',
       title: 'Why Choose Us',
       content: {
-        heading: 'Why Choose EduPro?',
+        heading: 'Why Choose CyberMate Solutions?',
         subheading: 'We provide the best learning experience for students across India',
         features: [
           { title: 'Expert Teachers', description: 'Learn from experienced educators with proven track records and years of teaching excellence', icon: 'award' },
@@ -218,7 +218,7 @@ async function main() {
       title: 'Call to Action',
       content: {
         heading: 'Ready to Start Learning?',
-        subheading: 'Join thousands of students already learning on EduPro. Start your free demo today!',
+        subheading: 'Join thousands of students already learning on CyberMate Solutions. Start your free demo today!',
         cta_text: 'Start Learning Today',
         cta_url: '/register',
         secondary_text: 'Explore Free Resources',
@@ -280,12 +280,12 @@ async function main() {
   // TESTIMONIALS
   // ========================
   const testimonials = [
-    { name: 'Priya Sharma', designation: 'Class 12 Student, Delhi', content: "EduPro completely transformed how I study! The live classes are incredibly interactive and the teachers are very patient with doubts. I scored 95% in my boards!", rating: 5, order: 1, isActive: true },
+    { name: 'Priya Sharma', designation: 'Class 12 Student, Delhi', content: "CyberMate Solutions completely transformed how I study! The live classes are incredibly interactive and the teachers are very patient with doubts. I scored 95% in my boards!", rating: 5, order: 1, isActive: true },
     { name: 'Rahul Mehta', designation: 'Class 10 Student, Mumbai', content: "The test series and performance analytics helped me identify my weak areas. My science marks improved from 65% to 88% in just 3 months.", rating: 5, order: 2, isActive: true },
     { name: 'Ananya Patel', designation: 'Class 11 Student, Bangalore', content: "Best online tuition platform! The recorded lectures are very clear and I can pause, rewind and replay as many times as I need. The doubt resolution is super fast.", rating: 5, order: 3, isActive: true },
     { name: 'Vikram Singh', designation: 'Parent, Jaipur', content: "As a parent, I can monitor Vikram's progress, attendance and test scores anytime. Very transparent platform. Highly recommend!", rating: 4, order: 4, isActive: true },
     { name: 'Sneha Reddy', designation: 'Class 9 Student, Hyderabad', content: "The study planner and performance tracking keeps me organized. I love how I can see exactly which chapters I need to focus on based on my test results.", rating: 5, order: 5, isActive: true },
-    { name: 'Arun Kumar', designation: 'Class 12 Student, Chennai', content: "The teachers are excellent! They explain concepts clearly and the live doubt sessions are very helpful. Cleared my JEE foundation thanks to EduPro.", rating: 5, order: 6, isActive: true },
+    { name: 'Arun Kumar', designation: 'Class 12 Student, Chennai', content: "The teachers are excellent! They explain concepts clearly and the live doubt sessions are very helpful. Cleared my JEE foundation thanks to CyberMate Solutions.", rating: 5, order: 6, isActive: true },
   ];
 
   await prisma.testimonial.createMany({ data: testimonials });
@@ -398,7 +398,7 @@ async function main() {
   const admin = await prisma.user.create({
     data: {
       name: 'Admin User',
-      email: 'admin@edupro.com',
+      email: 'admin@cybermatesolutions.com',
       password: await hashPassword('Admin@123'),
       role: 'ADMIN',
       phone: '+91 98765 00001',
@@ -410,7 +410,7 @@ async function main() {
   const teacher1 = await prisma.user.create({
     data: {
       name: 'Dr. Rajesh Kumar',
-      email: 'teacher@edupro.com',
+      email: 'teacher@cybermatesolutions.com',
       password: await hashPassword('Teacher@123'),
       role: 'TEACHER',
       phone: '+91 98765 00002',
@@ -430,7 +430,7 @@ async function main() {
   const teacher2 = await prisma.user.create({
     data: {
       name: 'Ms. Priti Sharma',
-      email: 'teacher2@edupro.com',
+      email: 'teacher2@cybermatesolutions.com',
       password: await hashPassword('Teacher@123'),
       role: 'TEACHER',
       phone: '+91 98765 00003',
@@ -450,7 +450,7 @@ async function main() {
   const teacher3 = await prisma.user.create({
     data: {
       name: 'Mr. Amit Verma',
-      email: 'teacher3@edupro.com',
+      email: 'teacher3@cybermatesolutions.com',
       password: await hashPassword('Teacher@123'),
       role: 'TEACHER',
       phone: '+91 98765 00004',
@@ -471,7 +471,7 @@ async function main() {
   const student1 = await prisma.user.create({
     data: {
       name: 'Arjun Gupta',
-      email: 'student@edupro.com',
+      email: 'student@cybermatesolutions.com',
       password: await hashPassword('Student@123'),
       role: 'STUDENT',
       phone: '+91 98765 00010',
@@ -491,7 +491,7 @@ async function main() {
   const student2 = await prisma.user.create({
     data: {
       name: 'Kavya Nair',
-      email: 'student2@edupro.com',
+      email: 'student2@cybermatesolutions.com',
       password: await hashPassword('Student@123'),
       role: 'STUDENT',
       phone: '+91 98765 00011',
@@ -512,7 +512,7 @@ async function main() {
   const parent = await prisma.user.create({
     data: {
       name: 'Sanjay Gupta',
-      email: 'parent@edupro.com',
+      email: 'parent@cybermatesolutions.com',
       password: await hashPassword('Parent@123'),
       role: 'PARENT',
       phone: '+91 98765 00020',
@@ -536,10 +536,10 @@ async function main() {
   }
 
   console.log('✅ Users created');
-  console.log('   Admin: admin@edupro.com / Admin@123');
-  console.log('   Teacher: teacher@edupro.com / Teacher@123');
-  console.log('   Student: student@edupro.com / Student@123');
-  console.log('   Parent: parent@edupro.com / Parent@123');
+  console.log('   Admin: admin@cybermatesolutions.com / Admin@123');
+  console.log('   Teacher: teacher@cybermatesolutions.com / Teacher@123');
+  console.log('   Student: student@cybermatesolutions.com / Student@123');
+  console.log('   Parent: parent@cybermatesolutions.com / Parent@123');
 
   // ========================
   // COURSES
@@ -562,7 +562,7 @@ async function main() {
       demoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
       categoryId: categories[0].id, // Mathematics
       createdById: admin.id,
-      metaTitle: 'Class 10 Mathematics Course | EduPro',
+      metaTitle: 'Class 10 Mathematics Course | CyberMate Solutions',
       metaDesc: 'Best online Class 10 Mathematics course with live classes, recorded lectures, and expert teachers.',
       totalLessons: 48,
       totalDuration: 2880, // 48 hours
@@ -999,10 +999,10 @@ async function main() {
 
   console.log('\n🎉 Database seeded successfully!');
   console.log('\n📋 Demo Credentials:');
-  console.log('   Admin:   admin@edupro.com / Admin@123');
-  console.log('   Teacher: teacher@edupro.com / Teacher@123');
-  console.log('   Student: student@edupro.com / Student@123');
-  console.log('   Parent:  parent@edupro.com / Parent@123');
+  console.log('   Admin:   admin@cybermatesolutions.com / Admin@123');
+  console.log('   Teacher: teacher@cybermatesolutions.com / Teacher@123');
+  console.log('   Student: student@cybermatesolutions.com / Student@123');
+  console.log('   Parent:  parent@cybermatesolutions.com / Parent@123');
 }
 
 main()
