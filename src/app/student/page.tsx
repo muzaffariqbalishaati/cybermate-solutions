@@ -3,13 +3,13 @@ import { getSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { StudentLayout } from '@/components/layouts/student-layout';
 import Link from 'next/link';
-import { BookOpen, PlayCircle, CalendarDays, FileText, Bell, TrendingUp, Clock, Award } from 'lucide-react';
+import { BookOpen, PlayCircle, CalendarDays, FileText, Bell, TrendingUp, Clock, Award, BookMarked, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { formatDate, getDaysRemaining } from '@/lib/utils';
 
 async function getStudentDashboardData(userId: string) {
   try {
-    const [enrollments, upcomingClasses, notifications, studyPlans, testAttempts, userRecord] = await Promise.all([
+    const [enrollments, upcomingClasses, notifications, studyPlans, testAttempts, userRecord, latestNotes] = await Promise.all([
       prisma.enrollment.findMany({
         where: { userId, isActive: true },
         include: {
@@ -53,6 +53,19 @@ async function getStudentDashboardData(userId: string) {
         where: { id: userId },
         select: { avatar: true },
       }),
+      prisma.studyNote.findMany({
+        where: { isPublished: true },
+        select: {
+          id: true,
+          title: true,
+          subject: true,
+          chapter: true,
+          fileUrl: true,
+          downloads: true,
+        },
+        orderBy: { createdAt: 'desc' },
+        take: 4,
+      }),
     ]);
 
     return {
@@ -62,6 +75,7 @@ async function getStudentDashboardData(userId: string) {
       studyPlans,
       testAttempts,
       avatar: userRecord?.avatar || null,
+      latestNotes: latestNotes || [],
     };
   } catch {
     return {
@@ -71,6 +85,7 @@ async function getStudentDashboardData(userId: string) {
       studyPlans: [],
       testAttempts: [],
       avatar: null,
+      latestNotes: [],
     };
   }
 }
@@ -283,6 +298,50 @@ export default async function StudentDashboardPage() {
                   </div>
                   <span className="text-xs text-muted-foreground flex-shrink-0">{formatDate(plan.date)}</span>
                 </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Study Notes & Revision Material */}
+        {data.latestNotes && data.latestNotes.length > 0 && (
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <BookMarked className="w-5 h-5 text-brand-600" />
+                <h2 className="text-lg font-heading font-semibold">Latest Study Notes & PDFs</h2>
+              </div>
+              <Link href="/student/notes" className="text-sm font-semibold text-primary hover:underline">
+                View all notes &rarr;
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {data.latestNotes.map((note: any) => (
+                <Link
+                  key={note.id}
+                  href="/student/notes"
+                  className="card p-4 hover:shadow-md hover:border-brand-300 dark:hover:border-brand-700 transition-all flex items-center justify-between gap-3 group"
+                >
+                  <div className="min-w-0 flex-1 space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-brand-50 text-brand-700 dark:bg-brand-950/40 dark:text-brand-300">
+                        {note.subject}
+                      </span>
+                      {note.chapter && (
+                        <span className="text-[11px] text-muted-foreground truncate">{note.chapter}</span>
+                      )}
+                    </div>
+                    <h3 className="font-semibold text-sm truncate group-hover:text-brand-600 transition-colors">
+                      {note.title}
+                    </h3>
+                    <p className="text-[11px] text-muted-foreground flex items-center gap-1">
+                      <Download className="w-3 h-3" /> {note.downloads} student downloads
+                    </p>
+                  </div>
+                  <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center flex-shrink-0 group-hover:bg-brand-50 group-hover:text-brand-600 transition-colors">
+                    <BookMarked className="w-4 h-4" />
+                  </div>
+                </Link>
               ))}
             </div>
           </div>

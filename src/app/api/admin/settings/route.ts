@@ -16,6 +16,12 @@ const DEFAULT_SETTINGS = [
   { key: 'razorpay_mode', value: 'test', type: 'select', group: 'payment', label: 'Payment Mode (test / live)' },
   { key: 'tax_enabled', value: 'true', type: 'boolean', group: 'payment', label: 'Enable GST / Tax' },
   { key: 'tax_rate', value: '18', type: 'number', group: 'payment', label: 'GST Rate (%)' },
+  { key: 'gdrive_enabled', value: 'false', type: 'boolean', group: 'storage', label: 'Enable Google Drive Cloud Storage' },
+  { key: 'gdrive_folder_id', value: '', type: 'text', group: 'storage', label: 'Google Drive Folder ID' },
+  { key: 'gdrive_client_email', value: '', type: 'text', group: 'storage', label: 'Google Service Account Email' },
+  { key: 'gdrive_private_key', value: '', type: 'password', group: 'storage', label: 'Google Service Account Private Key' },
+  { key: 'gdrive_service_account_json', value: '', type: 'textarea', group: 'storage', label: 'Google Service Account Full JSON' },
+  { key: 'gdrive_public_link', value: '', type: 'url', group: 'storage', label: 'Google Drive Public Folder Link' },
 ];
 
 // GET /api/admin/settings

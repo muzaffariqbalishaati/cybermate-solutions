@@ -26,6 +26,7 @@ const navGroups = [
     label: 'Academic Management',
     items: [
       { href: '/admin/courses', label: 'Courses & Curriculum', icon: BookOpen },
+      { href: '/admin/notes', label: 'Study Notes & Materials', icon: FileText },
       { href: '/admin/live-classes', label: 'Live Classes & Studios', icon: Video },
     ],
   },

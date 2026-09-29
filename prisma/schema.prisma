@@ -362,6 +362,7 @@ model Course {
   announcements   Announcement[]
   bundleCourses   BundleCourse[]
   coupons         CouponCourse[]
+  studyNotes      StudyNote[]
 
   @@map("courses")
 }
@@ -1330,4 +1331,33 @@ model Media {
   createdAt   DateTime  @default(now())
 
   @@map("media")
+}
+
+// ========================
+// STUDY NOTES & MATERIALS
+// ========================
+
+model StudyNote {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  courseId    String?
+  subject     String
+  grade       String?
+  chapter     String?
+  fileUrl     String
+  fileName    String
+  fileType    String?  @default("pdf")
+  fileSize    Int?     // bytes
+  driveFileId String?  // Google Drive file ID if hosted on Drive
+  isFree      Boolean  @default(true)
+  isPublished Boolean  @default(true)
+  downloads   Int      @default(0)
+  uploadedBy  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  course      Course?  @relation(fields: [courseId], references: [id], onDelete: SetNull)
+
+  @@map("study_notes")
 }

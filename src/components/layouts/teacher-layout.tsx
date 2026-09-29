@@ -5,7 +5,8 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import {
   LayoutDashboard, BookOpen, Video, HelpCircle, FileText,
-  Calendar, Users, Bell, LogOut, Menu, X, ArrowLeft, User
+  Calendar, Users, Bell, LogOut, Menu, X, ArrowLeft, User,
+  BookMarked
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { toast } from '@/hooks/use-toast';
@@ -14,6 +15,7 @@ import { TeacherMobileBottomNav } from '@/components/navigation/teacher-mobile-b
 const teacherNavItems = [
   { href: '/teacher', label: 'Dashboard', icon: LayoutDashboard, exact: true },
   { href: '/teacher/courses', label: 'My Courses', icon: BookOpen },
+  { href: '/teacher/notes', label: 'Study Notes & PDFs', icon: BookMarked },
   { href: '/teacher/live-classes', label: 'Live Sessions', icon: Video },
   { href: '/teacher/doubts', label: 'Doubts Queue', icon: HelpCircle },
   { href: '/teacher/assignments', label: 'Grade Assignments', icon: FileText },

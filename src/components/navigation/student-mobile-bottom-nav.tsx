@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, BookOpen, PlayCircle, HelpCircle, User } from 'lucide-react';
+import { LayoutDashboard, BookOpen, BookMarked, PlayCircle, User } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
 export function StudentMobileBottomNav() {
@@ -22,17 +22,17 @@ export function StudentMobileBottomNav() {
       exact: false,
     },
     {
+      href: '/student/notes',
+      label: 'Notes',
+      icon: BookMarked,
+      exact: false,
+    },
+    {
       href: '/student/live-classes',
       label: 'Live',
       icon: PlayCircle,
       exact: false,
       badge: 'Live',
-    },
-    {
-      href: '/student/doubts',
-      label: 'Doubts',
-      icon: HelpCircle,
-      exact: false,
     },
     {
       href: '/student/profile',
