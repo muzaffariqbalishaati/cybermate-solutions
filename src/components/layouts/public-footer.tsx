@@ -17,7 +17,7 @@ export function PublicFooter({ menu, settings }: PublicFooterProps) {
   const phone = settings['phone'] || '+91 9934215013';
   const address = settings['address'] || 'New Delhi, India';
   const copyright = settings['copyright_text'] || `© ${new Date().getFullYear()} ${siteName}. All rights reserved.`;
-  const whatsapp = settings['whatsapp'];
+  const whatsapp = settings['whatsapp'] || '9934215013';
 
   const socialLinks = {
     facebook: settings['social_facebook'],
@@ -28,7 +28,7 @@ export function PublicFooter({ menu, settings }: PublicFooterProps) {
   };
 
   // Default footer links
-  const quickLinks = [
+  const defaultQuickLinks = [
     { label: 'Home', url: '/' },
     { label: 'Courses', url: '/courses' },
     { label: 'Free Demo', url: '/demo' },
@@ -37,12 +37,41 @@ export function PublicFooter({ menu, settings }: PublicFooterProps) {
     { label: 'Contact', url: '/contact' },
   ];
 
-  const legalLinks = [
+  const defaultLegalLinks = [
     { label: 'Terms & Conditions', url: '/terms' },
     { label: 'Privacy Policy', url: '/privacy' },
     { label: 'Refund Policy', url: '/refund-policy' },
     { label: 'FAQ', url: '/faq' },
   ];
+
+  let quickLinks = defaultQuickLinks;
+  let legalLinks = defaultLegalLinks;
+
+  // Use database menu items if configured by admin
+  if (menu?.items && menu.items.length > 0) {
+    const qItems = menu.items.filter((i) => (i as any).target !== 'legal' && (i as any).target !== '_legal');
+    const lItems = menu.items.filter((i) => (i as any).target === 'legal' || (i as any).target === '_legal');
+    if (qItems.length > 0) {
+      quickLinks = qItems.map((i) => ({ label: i.label, url: i.url || '/' }));
+    }
+    if (lItems.length > 0) {
+      legalLinks = lItems.map((i) => ({ label: i.label, url: i.url || '/' }));
+    }
+  }
+
+  // Also support settings override
+  if (settings['footer_quick_links']) {
+    try {
+      const parsed = JSON.parse(settings['footer_quick_links']!);
+      if (Array.isArray(parsed) && parsed.length > 0) quickLinks = parsed;
+    } catch {}
+  }
+  if (settings['footer_legal_links']) {
+    try {
+      const parsed = JSON.parse(settings['footer_legal_links']!);
+      if (Array.isArray(parsed) && parsed.length > 0) legalLinks = parsed;
+    } catch {}
+  }
 
   return (
     <footer className="bg-slate-900 text-slate-300">

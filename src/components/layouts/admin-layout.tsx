@@ -47,6 +47,7 @@ const navGroups = [
   {
     label: 'System & Branding',
     items: [
+      { href: '/admin/menus', label: 'Menus & Navigation Links', icon: Menu },
       { href: '/admin/homepage', label: 'Homepage Customizer', icon: Globe },
       { href: '/admin/announcements', label: 'Broadcast Notices', icon: Megaphone },
       { href: '/admin/settings', label: 'Site & Gateway Settings', icon: Settings },
