@@ -5,10 +5,11 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import {
   LayoutDashboard, BookOpen, Video, HelpCircle, FileText,
-  Calendar, Users, Bell, LogOut, Menu, X, ArrowLeft
+  Calendar, Users, Bell, LogOut, Menu, X, ArrowLeft, User
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { toast } from '@/hooks/use-toast';
+import { TeacherMobileBottomNav } from '@/components/navigation/teacher-mobile-bottom-nav';
 
 const teacherNavItems = [
   { href: '/teacher', label: 'Dashboard', icon: LayoutDashboard, exact: true },
@@ -17,6 +18,7 @@ const teacherNavItems = [
   { href: '/teacher/doubts', label: 'Doubts Queue', icon: HelpCircle },
   { href: '/teacher/assignments', label: 'Grade Assignments', icon: FileText },
   { href: '/teacher/attendance', label: 'Mark Attendance', icon: Calendar },
+  { href: '/teacher/profile', label: 'My Profile & Bio', icon: User },
 ];
 
 import { useBranding } from '@/hooks/use-branding';
@@ -125,30 +127,41 @@ export function TeacherLayout({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="md:hidden p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+              className="md:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 app-tap"
               aria-label="Open sidebar"
             >
               <Menu className="w-5 h-5" />
             </button>
-            <span className="md:hidden font-bold text-sm text-slate-800">Faculty Workspace</span>
+            <div className="flex items-center gap-2">
+              <span className="font-heading font-extrabold text-sm tracking-tight gradient-text">
+                {siteName}
+              </span>
+              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-brand-100 text-brand-700">Teacher</span>
+            </div>
           </div>
 
-          <div className="flex items-center gap-4 ml-auto">
-            <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 ml-auto">
+            <Link
+              href="/teacher/profile"
+              className="flex items-center gap-2.5 p-1 rounded-2xl hover:bg-slate-50 transition-colors app-tap"
+            >
               <img
                 src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80"
                 alt="Teacher"
-                className="w-8 h-8 rounded-full object-cover border-2 border-brand-500"
+                className="w-8 h-8 rounded-full object-cover border-2 border-brand-500 shadow-sm"
               />
               <div className="hidden sm:block text-left text-xs">
-                <p className="font-bold text-slate-900">Dr. Rajesh Verma</p>
-                <p className="text-[10px] text-slate-400">Senior Physics Faculty</p>
+                <p className="font-bold text-slate-900">Faculty Portal</p>
+                <p className="text-[10px] text-slate-400">View Profile</p>
               </div>
-            </div>
+            </Link>
           </div>
         </header>
 
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 pb-20 md:pb-0">{children}</main>
+
+        {/* Native Android Mobile Bottom Bar */}
+        <TeacherMobileBottomNav />
       </div>
     </div>
   );

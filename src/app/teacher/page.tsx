@@ -11,27 +11,62 @@ import { Button } from '@/components/ui/button';
 export default function TeacherDashboardPage() {
   return (
     <TeacherLayout>
-      <div className="p-6 md:p-8 space-y-8 max-w-7xl mx-auto">
+      <div className="p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8 max-w-7xl mx-auto">
         
         {/* Welcome Banner */}
-        <div className="bg-gradient-to-r from-brand-900 to-slate-900 rounded-3xl p-6 sm:p-8 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-xl">
+        <div className="bg-gradient-to-r from-brand-900 to-slate-900 rounded-3xl p-5 sm:p-8 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 shadow-xl">
           <div className="space-y-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-brand-400 bg-brand-500/20 px-3 py-1 rounded-full">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-brand-400 bg-brand-500/20 px-3 py-1 rounded-full">
               Teacher Faculty Portal
             </span>
-            <h1 className="text-2xl sm:text-3xl font-heading font-extrabold text-white">
-              Welcome back, Dr. Rajesh Verma! 👋
+            <h1 className="text-xl sm:text-3xl font-heading font-extrabold text-white">
+              Welcome back, Faculty! 👋
             </h1>
             <p className="text-xs sm:text-sm text-slate-300">
               You have 1 live class scheduled today and 4 student doubts awaiting resolution.
             </p>
           </div>
 
-          <Link href="/teacher/live-classes">
-            <Button className="bg-red-600 hover:bg-red-700 text-white font-bold text-xs py-5 px-6 shadow-lg shadow-red-500/25">
-              <Video className="w-4 h-4 mr-2" />
-              Launch Live Studio
-            </Button>
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <Link href="/teacher/live-classes">
+              <Button className="bg-red-600 hover:bg-red-700 text-white font-bold text-xs py-4 px-5 rounded-2xl shadow-lg shadow-red-500/25 app-tap">
+                <Video className="w-4 h-4 mr-2" />
+                Live Studio
+              </Button>
+            </Link>
+            <Link href="/teacher/profile">
+              <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 font-bold text-xs py-4 px-4 rounded-2xl app-tap">
+                Edit Bio 👤
+              </Button>
+            </Link>
+          </div>
+        </div>
+
+        {/* Mobile Quick Action Pills */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none sm:hidden">
+          <Link
+            href="/teacher/live-classes"
+            className="flex-shrink-0 px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 flex items-center gap-1.5 shadow-sm app-tap"
+          >
+            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" /> Live Sessions
+          </Link>
+          <Link
+            href="/teacher/courses"
+            className="flex-shrink-0 px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 flex items-center gap-1.5 shadow-sm app-tap"
+          >
+            <span>📚</span> My Batches
+          </Link>
+          <Link
+            href="/teacher/doubts"
+            className="flex-shrink-0 px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 flex items-center gap-1.5 shadow-sm app-tap"
+          >
+            <span>❓</span> Doubts Queue
+          </Link>
+          <Link
+            href="/teacher/profile"
+            className="flex-shrink-0 px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 flex items-center gap-1.5 shadow-sm app-tap"
+          >
+            <span>👤</span> My Profile
           </Link>
         </div>
 

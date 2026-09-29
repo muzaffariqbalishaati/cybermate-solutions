@@ -91,7 +91,7 @@ export async function PATCH(req: NextRequest) {
   try {
     await requireRole(req, ['ADMIN']);
     const body = await req.json();
-    const { id, isActive, name, phone, specialization, experience, bio } = body;
+    const { id, isActive, name, email, phone, avatar, specialization, experience, bio, qualification } = body;
 
     if (!id) return errorResponse('Teacher ID required', 400);
 
@@ -102,18 +102,22 @@ export async function PATCH(req: NextRequest) {
       data: {
         ...(isActive !== undefined && { isActive }),
         ...(name && { name: name.trim() }),
+        ...(email && { email: email.trim().toLowerCase() }),
         ...(phone !== undefined && { phone: phone?.trim() || null }),
-        ...((specialization !== undefined || parsedExp !== undefined || bio !== undefined) && {
+        ...(avatar !== undefined && { avatar: avatar || null }),
+        ...((specialization !== undefined || parsedExp !== undefined || bio !== undefined || qualification !== undefined) && {
           teacher: {
             upsert: {
               create: {
                 specialization: specialization || 'General Faculty',
                 experience: parsedExp ?? 5,
+                qualification: qualification || null,
                 bio: bio || null,
               },
               update: {
                 ...(specialization !== undefined && { specialization }),
                 ...(parsedExp !== undefined && { experience: parsedExp }),
+                ...(qualification !== undefined && { qualification }),
                 ...(bio !== undefined && { bio }),
               },
             },

@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { toast } from '@/hooks/use-toast';
+import { AdminMobileBottomNav } from '@/components/navigation/admin-mobile-bottom-nav';
 
 const navGroups = [
   {
@@ -211,31 +212,44 @@ export function AdminLayout({ children }: AdminLayoutProps) {
       {/* Main Content */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top Bar */}
-        <header className="flex items-center gap-4 border-b bg-background px-6 h-16 flex-shrink-0">
-          <button
-            className="lg:hidden p-2 rounded-lg hover:bg-secondary transition-colors"
-            onClick={() => setSidebarOpen(true)}
-            aria-label="Open menu"
-          >
-            <Menu className="h-5 w-5" />
-          </button>
-
-          <div className="flex-1" />
-
+        <header className="flex items-center justify-between gap-4 border-b bg-background px-4 sm:px-6 h-16 flex-shrink-0">
           <div className="flex items-center gap-3">
-            <Link href="/admin/notifications" className="relative p-2 rounded-lg hover:bg-secondary transition-colors">
-              <Bell className="h-5 w-5" />
+            <button
+              className="lg:hidden p-2 rounded-xl hover:bg-secondary text-foreground transition-colors app-tap"
+              onClick={() => setSidebarOpen(true)}
+              aria-label="Open menu"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+            <div className="lg:hidden flex items-center gap-2">
+              <span className="font-heading font-extrabold text-sm tracking-tight gradient-text">
+                {branding.siteName}
+              </span>
+              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-brand-100 text-brand-700">Admin</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2.5">
+            <Link href="/admin/notifications" className="relative p-2 rounded-xl hover:bg-secondary transition-colors app-tap">
+              <Bell className="h-5 w-5 text-muted-foreground" />
             </Link>
-            <Link href="/" target="_blank" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              View Site ↗
+            <Link
+              href="/"
+              target="_blank"
+              className="text-xs font-semibold px-2.5 py-1.5 rounded-xl border border-border text-foreground hover:bg-secondary transition-colors app-tap"
+            >
+              Live Site ↗
             </Link>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-auto">
+        <main className="flex-1 overflow-auto pb-20 lg:pb-0">
           {children}
         </main>
+
+        {/* Native Android Mobile Bottom Bar */}
+        <AdminMobileBottomNav />
       </div>
     </div>
   );

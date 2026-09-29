@@ -9,7 +9,7 @@ import { formatDate, getDaysRemaining } from '@/lib/utils';
 
 async function getStudentDashboardData(userId: string) {
   try {
-    const [enrollments, upcomingClasses, notifications, studyPlans, testAttempts] = await Promise.all([
+    const [enrollments, upcomingClasses, notifications, studyPlans, testAttempts, userRecord] = await Promise.all([
       prisma.enrollment.findMany({
         where: { userId, isActive: true },
         include: {
@@ -49,11 +49,29 @@ async function getStudentDashboardData(userId: string) {
         orderBy: { submittedAt: 'desc' },
         take: 5,
       }),
+      prisma.user.findUnique({
+        where: { id: userId },
+        select: { avatar: true },
+      }),
     ]);
 
-    return { enrollments, upcomingClasses, notifications, studyPlans, testAttempts };
+    return {
+      enrollments,
+      upcomingClasses,
+      notifications,
+      studyPlans,
+      testAttempts,
+      avatar: userRecord?.avatar || null,
+    };
   } catch {
-    return { enrollments: [], upcomingClasses: [], notifications: [], studyPlans: [], testAttempts: [] };
+    return {
+      enrollments: [],
+      upcomingClasses: [],
+      notifications: [],
+      studyPlans: [],
+      testAttempts: [],
+      avatar: null,
+    };
   }
 }
 
@@ -71,29 +89,78 @@ export default async function StudentDashboardPage() {
 
   return (
     <StudentLayout>
-      <div className="p-6 space-y-8 max-w-7xl mx-auto">
-        {/* Welcome */}
-        <div className="flex items-start justify-between gap-4 flex-wrap">
-          <div>
-            <h1 className="text-2xl font-heading font-bold">
-              Welcome back, {session.name.split(' ')[0]}! 👋
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              You have {data.enrollments.length} active courses
-            </p>
-          </div>
-          {unreadCount > 0 && (
-            <Link href="/student/notifications">
-              <div className="flex items-center gap-2 bg-brand-50 text-brand-700 border border-brand-200 rounded-xl px-4 py-2.5 text-sm font-medium hover:bg-brand-100 transition-colors">
-                <Bell className="h-4 w-4" />
-                {unreadCount} new notification{unreadCount !== 1 ? 's' : ''}
+      <div className="p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8 max-w-7xl mx-auto">
+        {/* Welcome Banner */}
+        <div className="flex items-center justify-between gap-4 flex-wrap bg-gradient-to-r from-brand-500/10 via-indigo-500/10 to-purple-500/10 p-5 sm:p-6 rounded-3xl border border-brand-500/20">
+          <div className="flex items-center gap-3.5">
+            <Link href="/student/profile" className="relative group">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white font-bold flex items-center justify-center text-sm shadow-md overflow-hidden flex-shrink-0 group-hover:scale-105 transition-transform">
+                {data.avatar ? (
+                  <img src={data.avatar} alt={session.name} className="w-full h-full object-cover" />
+                ) : (
+                  session.name.slice(0, 2).toUpperCase()
+                )}
               </div>
+              <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full" />
             </Link>
-          )}
+            <div>
+              <h1 className="text-xl sm:text-2xl font-heading font-extrabold text-foreground">
+                Hello, {session.name.split(' ')[0]}! 👋
+              </h1>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
+                {data.enrollments.length} active courses • Keep up your learning streak!
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Link
+              href="/student/profile"
+              className="text-xs font-bold px-3.5 py-2 rounded-xl bg-white dark:bg-slate-800 border border-border shadow-sm text-foreground hover:bg-secondary transition-colors app-tap"
+            >
+              My Profile 👤
+            </Link>
+            {unreadCount > 0 && (
+              <Link href="/student/notifications">
+                <div className="flex items-center gap-1.5 bg-brand-50 text-brand-700 border border-brand-200 rounded-xl px-3 py-2 text-xs font-bold hover:bg-brand-100 transition-colors app-tap">
+                  <Bell className="h-3.5 w-3.5" />
+                  {unreadCount}
+                </div>
+              </Link>
+            )}
+          </div>
+        </div>
+
+        {/* Mobile Quick Action Pills */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none sm:hidden">
+          <Link
+            href="/student/courses"
+            className="flex-shrink-0 px-3.5 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 text-xs font-bold text-slate-700 flex items-center gap-1.5 shadow-sm app-tap"
+          >
+            <span>📚</span> Courses
+          </Link>
+          <Link
+            href="/student/live-classes"
+            className="flex-shrink-0 px-3.5 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 text-xs font-bold text-slate-700 flex items-center gap-1.5 shadow-sm app-tap"
+          >
+            <span className="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse" /> Live Sessions
+          </Link>
+          <Link
+            href="/student/doubts"
+            className="flex-shrink-0 px-3.5 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 text-xs font-bold text-slate-700 flex items-center gap-1.5 shadow-sm app-tap"
+          >
+            <span>❓</span> Ask Doubt
+          </Link>
+          <Link
+            href="/student/tests"
+            className="flex-shrink-0 px-3.5 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 text-xs font-bold text-slate-700 flex items-center gap-1.5 shadow-sm app-tap"
+          >
+            <span>📝</span> Mock Tests
+          </Link>
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
           {[
             { label: 'Enrolled Courses', value: data.enrollments.length, icon: BookOpen, color: 'text-blue-500 bg-blue-50' },
             { label: 'Upcoming Classes', value: data.upcomingClasses.length, icon: CalendarDays, color: 'text-purple-500 bg-purple-50' },

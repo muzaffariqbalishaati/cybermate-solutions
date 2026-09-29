@@ -125,7 +125,7 @@ export async function POST(req: NextRequest) {
 export async function PATCH(req: NextRequest) {
   try {
     await requireRole(req, ['ADMIN']);
-    const { id, isActive, name, phone, grade } = await req.json();
+    const { id, isActive, name, email, phone, avatar, grade, school, city } = await req.json();
 
     if (!id) return errorResponse('Student ID is required', 400);
 
@@ -133,13 +133,23 @@ export async function PATCH(req: NextRequest) {
       where: { id, role: 'STUDENT' },
       data: {
         ...(isActive !== undefined && { isActive }),
-        ...(name && { name }),
-        ...(phone !== undefined && { phone }),
-        ...(grade && {
+        ...(name && { name: name.trim() }),
+        ...(email && { email: email.trim().toLowerCase() }),
+        ...(phone !== undefined && { phone: phone?.trim() || null }),
+        ...(avatar !== undefined && { avatar: avatar || null }),
+        ...((grade !== undefined || school !== undefined || city !== undefined) && {
           student: {
             upsert: {
-              create: { grade },
-              update: { grade },
+              create: {
+                grade: grade || 'Class 10',
+                school: school || null,
+                city: city || null,
+              },
+              update: {
+                ...(grade !== undefined && { grade }),
+                ...(school !== undefined && { school }),
+                ...(city !== undefined && { city }),
+              },
             },
           },
         }),
@@ -148,7 +158,12 @@ export async function PATCH(req: NextRequest) {
         id: true,
         name: true,
         email: true,
+        phone: true,
+        avatar: true,
         isActive: true,
+        student: {
+          select: { grade: true, school: true, city: true },
+        },
       },
     });
 

@@ -1,36 +1,33 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { StudentLayout } from '@/components/layouts/student-layout';
+import { TeacherLayout } from '@/components/layouts/teacher-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PhotoUpload } from '@/components/ui/photo-upload';
 import {
-  User, Lock, Phone, Mail, GraduationCap, MapPin,
-  Sparkles, RefreshCw, ShieldCheck, Heart, Award
+  User, Lock, Mail, Phone, GraduationCap, Award,
+  Briefcase, Linkedin, ShieldCheck, CheckCircle2,
+  BookOpen, Star, RefreshCw
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
-export default function StudentProfilePage() {
+export default function TeacherProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [passwordSaving, setPasswordSaving] = useState(false);
 
-  // Student Profile state
+  // Profile data
   const [profile, setProfile] = useState({
-    name: 'Aarav Sharma',
-    email: 'student@cybermatesolutions.com',
+    name: 'Dr. Rajesh Kumar',
+    email: 'teacher@cybermatesolutions.com',
     phone: '+91 9934215013',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
-    grade: 'Class 10',
-    school: 'Delhi Public School, R.K. Puram',
-    city: 'New Delhi',
-    state: 'Delhi',
-    address: 'Sector 12, R.K. Puram',
-    about: 'Aspiring computer science engineering student preparing for CBSE Board Exams & Foundation.',
-    parentName: 'Sanjay Sharma',
-    parentPhone: '+91 9934215013',
-    referralCode: 'AAR1098',
+    qualification: 'Ph.D. Mathematics, IIT Delhi',
+    specialization: 'Mathematics & Advanced JEE',
+    experience: 12,
+    bio: 'Dedicated mathematics educator with over 12+ years of guiding students to top ranks in JEE Main and Advanced examinations.',
+    linkedin: 'https://linkedin.com/in/cybermate-faculty',
   });
 
   // Password state
@@ -54,19 +51,15 @@ export default function StudentProfilePage() {
           email: u.email || '',
           phone: u.phone || '+91 9934215013',
           avatar: u.avatar || null,
-          grade: u.student?.grade || 'Class 10',
-          school: u.student?.school || '',
-          city: u.student?.city || '',
-          state: u.student?.state || '',
-          address: u.student?.address || '',
-          about: u.student?.about || '',
-          parentName: 'Sanjay Sharma',
-          parentPhone: '+91 9934215013',
-          referralCode: u.student?.referralCode || 'AAR1098',
+          qualification: u.teacher?.qualification || 'M.Sc. Mathematics',
+          specialization: u.teacher?.specialization || 'Science & Mathematics',
+          experience: u.teacher?.experience || 8,
+          bio: u.teacher?.bio || '',
+          linkedin: u.teacher?.linkedin || '',
         });
       }
     } catch {
-      // Keep defaults
+      // Fallback to initial state
     } finally {
       setLoading(false);
     }
@@ -88,12 +81,11 @@ export default function StudentProfilePage() {
           name: profile.name.trim(),
           phone: profile.phone.trim() || null,
           avatar: profile.avatar || null,
-          grade: profile.grade,
-          school: profile.school,
-          city: profile.city,
-          state: profile.state,
-          address: profile.address,
-          about: profile.about,
+          qualification: profile.qualification,
+          specialization: profile.specialization,
+          experience: profile.experience,
+          bio: profile.bio,
+          linkedin: profile.linkedin,
         }),
       });
 
@@ -101,7 +93,7 @@ export default function StudentProfilePage() {
       if (data.success) {
         toast({
           title: 'Profile Updated! ✨',
-          description: 'Your student profile and photo have been successfully saved.',
+          description: 'Your faculty profile and bio have been successfully saved.',
         });
       } else {
         throw new Error(data.error || 'Failed to update profile');
@@ -121,7 +113,7 @@ export default function StudentProfilePage() {
     }
 
     if (newPassword !== confirmPassword) {
-      toast({ title: 'Mismatch', description: 'New password and confirmation do not match', variant: 'destructive' });
+      toast({ title: 'Mismatch', description: 'New password and confirm password do not match', variant: 'destructive' });
       return;
     }
 
@@ -153,16 +145,16 @@ export default function StudentProfilePage() {
   };
 
   return (
-    <StudentLayout>
-      <div className="p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8 max-w-4xl mx-auto">
+    <TeacherLayout>
+      <div className="p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8 max-w-5xl mx-auto">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-heading font-extrabold text-slate-900 tracking-tight">
-              My Student Profile
+              Faculty Profile & Bio
             </h1>
             <p className="text-slate-500 text-xs sm:text-sm mt-1">
-              Manage personal info, avatar photo, school grade, and parent guardian contacts
+              Customize your educator credentials, photo, subjects, and student visibility
             </p>
           </div>
 
@@ -178,30 +170,30 @@ export default function StudentProfilePage() {
           </Button>
         </div>
 
-        {/* Quick Academic Badges */}
+        {/* Quick Stats Banner */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
           <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm space-y-1">
-            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Class / Grade</span>
-            <p className="text-xl sm:text-2xl font-bold text-brand-600">{profile.grade}</p>
-            <p className="text-[10px] text-slate-400">Current Standard</p>
+            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Experience</span>
+            <p className="text-xl sm:text-2xl font-bold text-slate-900">{profile.experience}+ Years</p>
+            <p className="text-[10px] text-brand-600 font-medium">Verified Mentor</p>
           </div>
 
           <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm space-y-1">
-            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Status</span>
-            <p className="text-xl sm:text-2xl font-bold text-emerald-600">Active Student</p>
-            <p className="text-[10px] text-slate-400">Verified Account</p>
+            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Teaching Rating</span>
+            <p className="text-xl sm:text-2xl font-bold text-amber-500">4.9 / 5.0 ⭐</p>
+            <p className="text-[10px] text-slate-400">Based on 1,400+ reviews</p>
           </div>
 
           <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm space-y-1">
-            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Referral Code</span>
-            <p className="text-xl sm:text-2xl font-bold text-indigo-600">{profile.referralCode}</p>
-            <p className="text-[10px] text-slate-400">Earn ₹500 per friend</p>
+            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Batches</span>
+            <p className="text-xl sm:text-2xl font-bold text-brand-600">8 Active</p>
+            <p className="text-[10px] text-slate-400">Live & video sessions</p>
           </div>
 
           <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm space-y-1">
-            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Attendance</span>
-            <p className="text-xl sm:text-2xl font-bold text-amber-500">96.4%</p>
-            <p className="text-[10px] text-slate-400">Regular Learner</p>
+            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Role</span>
+            <p className="text-xl sm:text-2xl font-bold text-emerald-600">FACULTY</p>
+            <p className="text-[10px] text-slate-400">CyberMate Solutions</p>
           </div>
         </div>
 
@@ -213,10 +205,10 @@ export default function StudentProfilePage() {
               <div>
                 <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
                   <User className="w-5 h-5 text-brand-600" />
-                  Student Photo & Basic Info
+                  Educator Identity & Avatar
                 </h2>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  Update your display picture, verified mobile number and academic identification.
+                  Your photo and specialization are shown to students in course listings and live class sessions.
                 </p>
               </div>
             </div>
@@ -226,23 +218,23 @@ export default function StudentProfilePage() {
               onChange={newUrl => setProfile({ ...profile, avatar: newUrl || '' })}
               name={profile.name}
               size="lg"
-              label="Student Profile Picture"
+              label="Educator Profile Picture"
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 pt-2">
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">Student Full Name *</label>
+                <label className="text-xs font-bold text-slate-700">Full Name *</label>
                 <Input
                   required
                   value={profile.name}
                   onChange={e => setProfile({ ...profile, name: e.target.value })}
-                  placeholder="e.g. Aarav Sharma"
+                  placeholder="e.g. Dr. Rajesh Kumar"
                   className="rounded-xl h-11 text-sm font-medium"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">Registered Email Address</label>
+                <label className="text-xs font-bold text-slate-700">Official Email</label>
                 <Input
                   disabled
                   value={profile.email}
@@ -251,7 +243,7 @@ export default function StudentProfilePage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">Mobile Number *</label>
+                <label className="text-xs font-bold text-slate-700">Phone Number *</label>
                 <Input
                   required
                   value={profile.phone}
@@ -262,92 +254,66 @@ export default function StudentProfilePage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">Grade / Standard *</label>
-                <select
-                  className="w-full h-11 px-3.5 rounded-xl border border-slate-300 text-sm font-medium bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
-                  value={profile.grade}
-                  onChange={e => setProfile({ ...profile, grade: e.target.value })}
-                >
-                  <option>Class 6 - 8 Foundation</option>
-                  <option>Class 9</option>
-                  <option>Class 10</option>
-                  <option>Class 11 Science</option>
-                  <option>Class 11 Commerce</option>
-                  <option>Class 12 Science</option>
-                  <option>Class 12 Commerce</option>
-                  <option>JEE Main / Advanced</option>
-                  <option>NEET Medical</option>
-                </select>
-              </div>
-
-              <div className="sm:col-span-2 space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">School / College Name</label>
+                <label className="text-xs font-bold text-slate-700">Subject Specialization *</label>
                 <Input
-                  value={profile.school}
-                  onChange={e => setProfile({ ...profile, school: e.target.value })}
-                  placeholder="e.g. Delhi Public School, R.K. Puram"
+                  required
+                  value={profile.specialization}
+                  onChange={e => setProfile({ ...profile, specialization: e.target.value })}
+                  placeholder="e.g. Mathematics, JEE Advanced, Physics"
                   className="rounded-xl h-11 text-sm font-medium"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">City</label>
-                <Input
-                  value={profile.city}
-                  onChange={e => setProfile({ ...profile, city: e.target.value })}
-                  placeholder="e.g. New Delhi"
-                  className="rounded-xl h-11 text-sm font-medium"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">State</label>
-                <Input
-                  value={profile.state}
-                  onChange={e => setProfile({ ...profile, state: e.target.value })}
-                  placeholder="e.g. Delhi"
-                  className="rounded-xl h-11 text-sm font-medium"
-                />
-              </div>
-
-              <div className="sm:col-span-2 space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">About / Learning Goals</label>
-                <textarea
-                  rows={3}
-                  value={profile.about}
-                  onChange={e => setProfile({ ...profile, about: e.target.value })}
-                  placeholder="Briefly describe your dream target exam, college aspirations or learning interests..."
-                  className="w-full p-3.5 rounded-2xl border border-slate-300 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
                 />
               </div>
             </div>
           </div>
 
-          {/* Parent Guardian Details */}
+          {/* Academic Credentials & Bio */}
           <div className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-7 shadow-sm space-y-5">
             <h2 className="text-base sm:text-lg font-bold text-slate-900 pb-3 border-b flex items-center gap-2">
-              <Phone className="w-5 h-5 text-brand-600" />
-              Parent / Guardian Contact Details
+              <GraduationCap className="w-5 h-5 text-brand-600" />
+              Academic Credentials & Bio
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">Parent / Guardian Name</label>
+                <label className="text-xs font-bold text-slate-700">Highest Qualification</label>
                 <Input
-                  value={profile.parentName}
-                  onChange={e => setProfile({ ...profile, parentName: e.target.value })}
-                  placeholder="e.g. Sanjay Sharma"
+                  value={profile.qualification}
+                  onChange={e => setProfile({ ...profile, qualification: e.target.value })}
+                  placeholder="e.g. Ph.D. Mathematics, IIT Delhi"
                   className="rounded-xl h-11 text-sm font-medium"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">Parent WhatsApp / Mobile Number</label>
+                <label className="text-xs font-bold text-slate-700">Teaching Experience (Years)</label>
                 <Input
-                  value={profile.parentPhone}
-                  onChange={e => setProfile({ ...profile, parentPhone: e.target.value })}
-                  placeholder="+91 9934215013"
+                  type="number"
+                  min="0"
+                  max="60"
+                  value={profile.experience}
+                  onChange={e => setProfile({ ...profile, experience: parseInt(e.target.value) || 0 })}
                   className="rounded-xl h-11 text-sm font-medium"
+                />
+              </div>
+
+              <div className="sm:col-span-2 space-y-1.5">
+                <label className="text-xs font-bold text-slate-700">LinkedIn / Portfolio URL</label>
+                <Input
+                  value={profile.linkedin}
+                  onChange={e => setProfile({ ...profile, linkedin: e.target.value })}
+                  placeholder="https://linkedin.com/in/username"
+                  className="rounded-xl h-11 text-sm font-medium"
+                />
+              </div>
+
+              <div className="sm:col-span-2 space-y-1.5">
+                <label className="text-xs font-bold text-slate-700">About Me / Teaching Philosophy</label>
+                <textarea
+                  rows={4}
+                  value={profile.bio}
+                  onChange={e => setProfile({ ...profile, bio: e.target.value })}
+                  placeholder="Introduce yourself to prospective students, highlight your previous results, key methodology, and success stories..."
+                  className="w-full p-3.5 rounded-2xl border border-slate-300 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
                 />
               </div>
             </div>
@@ -368,12 +334,12 @@ export default function StudentProfilePage() {
         <div className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-7 shadow-sm space-y-5">
           <h2 className="text-base sm:text-lg font-bold text-slate-900 pb-3 border-b flex items-center gap-2">
             <Lock className="w-5 h-5 text-brand-600" />
-            Security & Password Settings
+            Security & Password Change
           </h2>
 
           <form onSubmit={handlePasswordChange} className="space-y-4 max-w-xl">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700">Current Password (optional)</label>
+              <label className="text-xs font-bold text-slate-700">Current Password (optional for verification)</label>
               <Input
                 type="password"
                 value={currentPassword}
@@ -403,7 +369,7 @@ export default function StudentProfilePage() {
                   type="password"
                   value={confirmPassword}
                   onChange={e => setConfirmPassword(e.target.value)}
-                  placeholder="Re-enter password"
+                  placeholder="Re-enter new password"
                   className="rounded-xl h-11 text-sm font-medium"
                 />
               </div>
@@ -420,6 +386,6 @@ export default function StudentProfilePage() {
           </form>
         </div>
       </div>
-    </StudentLayout>
+    </TeacherLayout>
   );
 }
