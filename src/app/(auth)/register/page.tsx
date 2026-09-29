@@ -11,11 +11,20 @@ import { Input } from '@/components/ui/input';
 import { registerSchema, type RegisterSchema } from '@/lib/validations';
 import { toast } from '@/hooks/use-toast';
 import { useBranding } from '@/hooks/use-branding';
+import { useAuth } from '@/hooks/use-auth';
+import { useEffect } from 'react';
 
 export default function RegisterPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const { siteName, logoUrl } = useBranding();
+  const { isLoggedIn, dashboardUrl, mounted } = useAuth();
+
+  useEffect(() => {
+    if (mounted && isLoggedIn) {
+      router.replace(dashboardUrl);
+    }
+  }, [mounted, isLoggedIn, dashboardUrl, router]);
 
   const {
     register,
@@ -42,6 +51,14 @@ export default function RegisterPage() {
       if (!response.ok) {
         toast({ title: 'Registration Failed', description: result.error, variant: 'destructive' });
         return;
+      }
+
+      // Save user info locally and dispatch event
+      if (result.data) {
+        try {
+          localStorage.setItem('auth_user', JSON.stringify(result.data));
+          window.dispatchEvent(new CustomEvent('auth-state-changed'));
+        } catch {}
       }
 
       toast({ title: 'Account Created!', description: 'Welcome to CyberMate Solutions! You are now logged in.', variant: 'default' });

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { BookOpen, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Youtube, Linkedin } from 'lucide-react';
+import { FooterAccountLink } from '@/components/navigation/footer-account-link';
 
 interface PublicFooterProps {
   menu: {
@@ -203,7 +204,7 @@ export function PublicFooter({ menu, settings }: PublicFooterProps) {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-slate-500">
             <p>{copyright}</p>
             <div className="flex items-center gap-4">
-              <Link href="/login" className="hover:text-slate-300 transition-colors">Student Login</Link>
+              <FooterAccountLink />
               <Link href="/admin" className="hover:text-slate-300 transition-colors">Admin</Link>
             </div>
           </div>

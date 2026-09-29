@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Menu, X, ChevronDown, BookOpen, Bell, User, LogOut, Settings } from 'lucide-react';
+import { Menu, X, ChevronDown, BookOpen, User, LogOut, LayoutDashboard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/cn';
+import { useAuth } from '@/hooks/use-auth';
 
 interface MenuItem {
   id: string;
@@ -29,6 +29,7 @@ export function PublicHeader({ menu, settings }: PublicHeaderProps) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const pathname = usePathname();
+  const { user, isLoggedIn, dashboardUrl, mounted, logout } = useAuth();
 
   const siteName = settings['site_name'] || 'CyberMate Solutions';
   const logoUrl = settings['logo_url'];
@@ -52,7 +53,15 @@ export function PublicHeader({ menu, settings }: PublicHeaderProps) {
     { id: 'contact', label: 'Contact', url: '/contact' },
   ];
 
-  const navItems = (menu?.items && menu.items.length > 0) ? menu.items : defaultItems;
+  const rawNavItems = (menu?.items && menu.items.length > 0) ? menu.items : defaultItems;
+
+  // Filter out any login or register links from custom nav if the user is already logged in
+  const navItems = rawNavItems.filter(item => {
+    if (mounted && isLoggedIn) {
+      if (item.url === '/login' || item.url === '/register') return false;
+    }
+    return true;
+  });
 
   const isDarkHeader = pathname === '/' && !isScrolled && !isMobileOpen;
 
@@ -164,19 +173,80 @@ export function PublicHeader({ menu, settings }: PublicHeaderProps) {
                 📞 {phone}
               </a>
             )}
-            <Button
-              variant="ghost"
-              size="sm"
-              className={cn(
-                isDarkHeader && "text-slate-100 hover:text-white hover:bg-white/10"
-              )}
-              asChild
-            >
-              <Link href="/login">{loginBtnText}</Link>
-            </Button>
-            <Button variant="gradient" size="sm" asChild className="shadow-md shadow-brand-500/20 font-semibold">
-              <Link href="/register">{signupBtnText}</Link>
-            </Button>
+
+            {mounted && isLoggedIn ? (
+              <div className="flex items-center gap-2.5">
+                <Button
+                  variant="gradient"
+                  size="sm"
+                  asChild
+                  className="shadow-md shadow-brand-500/20 font-semibold gap-2 app-tap"
+                >
+                  <Link href={dashboardUrl} prefetch={true}>
+                    <LayoutDashboard className="h-4 w-4" />
+                    <span>Dashboard</span>
+                  </Link>
+                </Button>
+
+                {/* Profile quick button */}
+                <Link
+                  href={`${dashboardUrl}/profile`}
+                  className={cn(
+                    "flex items-center gap-2 px-2.5 py-1.5 rounded-xl transition-all border text-xs font-semibold app-tap",
+                    isDarkHeader
+                      ? "border-white/20 bg-white/10 hover:bg-white/20 text-white"
+                      : "border-border bg-secondary/60 hover:bg-secondary text-foreground"
+                  )}
+                  title={`${user?.name || 'Account'} (${user?.role})`}
+                >
+                  {user?.avatar ? (
+                    <img
+                      src={user.avatar}
+                      alt={user.name || 'User'}
+                      className="h-6 w-6 rounded-lg object-cover"
+                    />
+                  ) : (
+                    <div className="h-6 w-6 rounded-lg bg-gradient-to-br from-brand-500 to-indigo-600 text-white flex items-center justify-center font-bold text-[11px]">
+                      {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                    </div>
+                  )}
+                  <span className="max-w-[110px] truncate hidden xl:inline-block">
+                    {user?.name?.split(' ')[0] || 'My Account'}
+                  </span>
+                </Link>
+
+                <button
+                  type="button"
+                  onClick={logout}
+                  className={cn(
+                    "p-2 rounded-xl transition-colors border text-xs app-tap",
+                    isDarkHeader
+                      ? "border-white/15 hover:bg-white/10 text-slate-300 hover:text-red-400"
+                      : "border-border hover:bg-red-50 hover:text-red-600 text-muted-foreground"
+                  )}
+                  title="Logout"
+                  aria-label="Logout"
+                >
+                  <LogOut className="h-4 w-4" />
+                </button>
+              </div>
+            ) : (
+              <>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={cn(
+                    isDarkHeader && "text-slate-100 hover:text-white hover:bg-white/10"
+                  )}
+                  asChild
+                >
+                  <Link href="/login">{loginBtnText}</Link>
+                </Button>
+                <Button variant="gradient" size="sm" asChild className="shadow-md shadow-brand-500/20 font-semibold app-tap">
+                  <Link href="/register">{signupBtnText}</Link>
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -267,12 +337,57 @@ export function PublicHeader({ menu, settings }: PublicHeaderProps) {
           </div>
 
           <div className="pt-4 mt-2 border-t border-border flex flex-col gap-2.5">
-            <Button variant="outline" className="w-full h-11 text-sm font-bold rounded-xl app-tap" asChild>
-              <Link href="/login" onClick={() => setIsMobileOpen(false)}>{loginBtnText}</Link>
-            </Button>
-            <Button variant="gradient" className="w-full h-11 text-sm font-bold rounded-xl shadow-md shadow-brand-500/20 app-tap" asChild>
-              <Link href="/register" onClick={() => setIsMobileOpen(false)}>{signupBtnText}</Link>
-            </Button>
+            {mounted && isLoggedIn ? (
+              <>
+                <div className="flex items-center gap-3 p-3 bg-secondary/70 rounded-2xl border border-border">
+                  {user?.avatar ? (
+                    <img src={user.avatar} alt={user.name || 'User'} className="h-11 w-11 rounded-xl object-cover border border-border" />
+                  ) : (
+                    <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-brand-500 via-indigo-500 to-purple-600 text-white flex items-center justify-center font-bold text-base shadow-sm">
+                      {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-bold truncate text-foreground">{user?.name || 'Logged In'}</p>
+                    <p className="text-xs text-muted-foreground capitalize">{user?.role ? `${user.role.toLowerCase()} portal` : 'Active User'}</p>
+                  </div>
+                </div>
+
+                <Button variant="gradient" className="w-full h-11 text-sm font-bold rounded-xl shadow-md shadow-brand-500/20 app-tap flex items-center justify-center gap-2" asChild>
+                  <Link href={dashboardUrl} onClick={() => setIsMobileOpen(false)}>
+                    <LayoutDashboard className="h-4 w-4" />
+                    <span>Go to Dashboard</span>
+                  </Link>
+                </Button>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <Button variant="outline" className="h-10 text-xs font-semibold rounded-xl app-tap" asChild>
+                    <Link href={`${dashboardUrl}/profile`} onClick={() => setIsMobileOpen(false)}>
+                      <User className="h-3.5 w-3.5 mr-1.5" /> My Profile
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="h-10 text-xs font-semibold rounded-xl text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 border-red-200/50 app-tap"
+                    onClick={() => {
+                      setIsMobileOpen(false);
+                      logout();
+                    }}
+                  >
+                    <LogOut className="h-3.5 w-3.5 mr-1.5" /> Logout
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <>
+                <Button variant="outline" className="w-full h-11 text-sm font-bold rounded-xl app-tap" asChild>
+                  <Link href="/login" onClick={() => setIsMobileOpen(false)}>{loginBtnText}</Link>
+                </Button>
+                <Button variant="gradient" className="w-full h-11 text-sm font-bold rounded-xl shadow-md shadow-brand-500/20 app-tap" asChild>
+                  <Link href="/register" onClick={() => setIsMobileOpen(false)}>{signupBtnText}</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </>

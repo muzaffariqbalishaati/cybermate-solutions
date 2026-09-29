@@ -2,24 +2,45 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, BookOpen, PlayCircle, HelpCircle, User } from 'lucide-react';
+import { Home, BookOpen, PlayCircle, HelpCircle, User, LayoutDashboard } from 'lucide-react';
 import { cn } from '@/lib/cn';
-import { useEffect, useState } from 'react';
+import { useAuth } from '@/hooks/use-auth';
+
+interface BottomNavItem {
+  href: string;
+  label: string;
+  icon: any;
+  exact: boolean;
+  badge?: string;
+  altHrefs?: string[];
+}
 
 export function MobileBottomNav() {
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const { isLoggedIn, dashboardUrl, mounted } = useAuth();
 
   // Do not show bottom nav inside live studio/classroom or admin portal fullscreens if desired
   if (pathname.includes('/live-classroom') || pathname.startsWith('/admin')) {
     return null;
   }
 
-  const items = [
+  const accountItem: BottomNavItem = mounted && isLoggedIn
+    ? {
+        href: dashboardUrl,
+        label: 'Dashboard',
+        icon: LayoutDashboard,
+        exact: false,
+        altHrefs: ['/student', '/teacher', '/parent', '/admin'],
+      }
+    : {
+        href: '/login',
+        label: 'Account',
+        icon: User,
+        exact: false,
+        altHrefs: ['/student', '/teacher', '/parent', '/register'],
+      };
+
+  const items: BottomNavItem[] = [
     {
       href: '/',
       label: 'Home',
@@ -45,13 +66,7 @@ export function MobileBottomNav() {
       icon: HelpCircle,
       exact: true,
     },
-    {
-      href: '/login',
-      label: 'Account',
-      icon: User,
-      exact: false,
-      altHrefs: ['/student', '/teacher', '/parent', '/register'],
-    },
+    accountItem,
   ];
 
   return (

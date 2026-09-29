@@ -11,6 +11,8 @@ import { Input } from '@/components/ui/input';
 import { loginSchema, type LoginSchema } from '@/lib/validations';
 import { toast } from '@/hooks/use-toast';
 import { useBranding } from '@/hooks/use-branding';
+import { useAuth } from '@/hooks/use-auth';
+import { useEffect } from 'react';
 
 function LoginForm() {
   const router = useRouter();
@@ -18,6 +20,13 @@ function LoginForm() {
   const from = searchParams.get('from') || '/';
   const [showPassword, setShowPassword] = useState(false);
   const { siteName, logoUrl } = useBranding();
+  const { isLoggedIn, dashboardUrl, mounted } = useAuth();
+
+  useEffect(() => {
+    if (mounted && isLoggedIn) {
+      router.replace(dashboardUrl);
+    }
+  }, [mounted, isLoggedIn, dashboardUrl, router]);
 
   const {
     register,
@@ -43,6 +52,14 @@ function LoginForm() {
       }
 
       toast({ title: 'Welcome back!', description: 'Login successful', variant: 'default' });
+
+      // Save user info locally and dispatch event
+      if (result.data) {
+        try {
+          localStorage.setItem('auth_user', JSON.stringify(result.data));
+          window.dispatchEvent(new CustomEvent('auth-state-changed'));
+        } catch {}
+      }
 
       // Redirect based on role
       const role = result.data?.role;

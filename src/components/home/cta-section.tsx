@@ -1,6 +1,9 @@
+'use client';
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, LayoutDashboard } from 'lucide-react';
+import { useAuth } from '@/hooks/use-auth';
 
 interface CTASectionProps {
   section?: {
@@ -10,13 +13,22 @@ interface CTASectionProps {
 }
 
 export function CTASection({ section }: CTASectionProps) {
+  const { isLoggedIn, dashboardUrl, mounted } = useAuth();
+
   if (section && !section.isVisible) return null;
 
   const content = (section?.content as Record<string, string>) || {};
   const heading = content.heading || 'Ready to Start Learning?';
   const subheading = content.subheading || 'Join thousands of students already learning on CyberMate Solutions. Start your free demo today!';
-  const ctaText = content.cta_text || 'Start Learning Today';
-  const ctaUrl = content.cta_url || '/register';
+  
+  const rawCtaUrl = content.cta_url || '/register';
+  const isDefaultRegister = !rawCtaUrl || rawCtaUrl === '/register' || rawCtaUrl.includes('register');
+
+  const ctaUrl = (mounted && isLoggedIn && isDefaultRegister) ? dashboardUrl : rawCtaUrl;
+  const ctaText = (mounted && isLoggedIn && isDefaultRegister)
+    ? 'Go to My Dashboard'
+    : (content.cta_text || 'Start Learning Today');
+
   const secondaryText = content.secondary_text || 'Explore Free Resources';
   const secondaryUrl = content.secondary_url || '/resources';
 
@@ -36,13 +48,14 @@ export function CTASection({ section }: CTASectionProps) {
         <p className="text-white/80 text-lg mb-10 max-w-2xl mx-auto">{subheading}</p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Button size="xl" className="bg-white text-brand-600 hover:bg-white/90 font-bold shadow-2xl" asChild>
+          <Button size="xl" className="bg-white text-brand-600 hover:bg-white/90 font-bold shadow-2xl app-tap gap-2" asChild>
             <Link href={ctaUrl}>
-              {ctaText}
+              {mounted && isLoggedIn && isDefaultRegister && <LayoutDashboard className="h-5 w-5" />}
+              <span>{ctaText}</span>
               <ArrowRight className="h-5 w-5" />
             </Link>
           </Button>
-          <Button size="xl" variant="outline" className="border-white/40 text-white hover:bg-white/10" asChild>
+          <Button size="xl" variant="outline" className="border-white/40 text-white hover:bg-white/10 app-tap" asChild>
             <Link href={secondaryUrl}>{secondaryText}</Link>
           </Button>
         </div>

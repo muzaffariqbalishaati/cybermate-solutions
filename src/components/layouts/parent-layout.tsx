@@ -27,6 +27,10 @@ export function ParentLayout({ children }: { children: React.ReactNode }) {
 
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' }).catch(() => null);
+    try {
+      localStorage.removeItem('auth_user');
+      window.dispatchEvent(new CustomEvent('auth-state-changed'));
+    } catch {}
     toast({ title: 'Logged out', description: 'See you soon!' });
     router.push('/login');
   };

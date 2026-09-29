@@ -46,7 +46,11 @@ export function StudentLayout({ children, unreadNotifications = 0 }: StudentLayo
   const router = useRouter();
 
   const handleLogout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' });
+    await fetch('/api/auth/logout', { method: 'POST' }).catch(() => null);
+    try {
+      localStorage.removeItem('auth_user');
+      window.dispatchEvent(new CustomEvent('auth-state-changed'));
+    } catch {}
     toast({ title: 'Logged out', description: 'See you soon!' });
     router.push('/login');
   };
