@@ -1,0 +1,346 @@
+{
+  "businessProfile": {
+    "businessName": "CyberMate Solutions",
+    "ownerName": "Muzaffar Iqbal Ishaati",
+    "tagline": "Mobile & Computer Repairing • Website Development • Mobile Accessories",
+    "address": "J.J Market, Sanhaula, Bhagalpur, Bihar 813205, India",
+    "country": "India",
+    "whatsappNumber": "9934215013",
+    "mobileNumber": "9934215013",
+    "email": "muzaffarishaati@gmail.com",
+    "businessHours": "Mon - Sat: 09:30 AM - 08:30 PM (IST)",
+    "currency": "INR",
+    "currencySymbol": "₹",
+    "paymentDetails": "Scan QR Code or pay via UPI ID: 9934215013@upi (PhonePe / Google Pay / Paytm / BHIM) | Cash at Counter (J.J Market, Sanhaula)"
+  },
+  "aiInstructions": {
+    "systemPrompt": "You are CyberMate AI, the official intelligent assistant for CyberMate Solutions located at J.J Market, Sanhaula, Bhagalpur, Bihar 813205, India. The business is owned and operated by Muzaffar Iqbal Ishaati (Mobile/WhatsApp: 9934215013, Email: muzaffarishaati@gmail.com). We are located in India and operate in Indian Rupees (INR / ₹). We specialize in: 1) Mobile & Smartphone Repairing (Display replacement, Battery, Charging Port/Jack, IC repair), 2) Computer & Laptop Repairing (SSD Upgrades, Windows installation, Thermal paste servicing), 3) Website Development (Custom business websites, E-commerce stores, Portfolios), and 4) Premium Mobile Accessories (PD Fast Chargers, Earbuds, Power Banks, 9D Tempered Glass). Always reply politely in Hindi, Roman Urdu, or English. When a customer asks for prices, always quote exact rates in INR (₹) along with warranty and repair time. For payments, provide our official QR code and UPI ID: 9934215013@upi. NEVER provide or ask for bank account numbers, IFSC codes, or net banking. Customers can also pay cash at our shop in J.J Market, Sanhaula.",
+    "pricingPolicy": "Always provide the exact price or starting rate from our catalog in Indian Rupees (INR / ₹). For mobile and laptop repairs, explain that we provide warranty on replacement parts and fast turnaround. For shop visits, share our address: J.J Market, Sanhaula, Bhagalpur, Bihar 813205.",
+    "discountPolicy": "Repair and accessories rates are very reasonable and competitive with warranty. For combo services (e.g. Screen Replacement + Tempered Glass, or SSD Upgrade + Windows Setup), offer an exclusive combo offer or discount.",
+    "specialAnnouncement": "Special Offer at J.J Market, Sanhaula shop: Free 9D Tempered Glass with Mobile Screen Replacement & Free Windows Setup with Laptop SSD Upgrade!",
+    "languageStyle": "friendly_roman_urdu_hindi"
+  },
+  "products": [
+    {
+      "id": "item-1",
+      "name": "Mobile Screen / LCD Replacement",
+      "category": "Mobile Repairing",
+      "itemType": "service",
+      "price": 1500,
+      "billingType": "Starting from (Model Dependent)",
+      "currency": "INR",
+      "turnaround": "1 - 2 Hours (Same Day)",
+      "warranty": "30 Days Testing Warranty",
+      "compatibility": "iPhone, Samsung, Xiaomi, Vivo, Oppo, Realme, OnePlus, Infinix, Tecno",
+      "description": "Original quality OLED & IPS display replacement with neat fitting. Clean fitting with no glue marks.",
+      "features": [
+        "High Color Accuracy",
+        "Smooth Touch Response",
+        "Free Fitting & Testing",
+        "Free Tempered Glass Protector",
+        "Same-Day Delivery"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "item-2",
+      "name": "Mobile Battery Replacement (Original Grade)",
+      "category": "Mobile Repairing",
+      "itemType": "service",
+      "price": 799,
+      "billingType": "Starting from",
+      "currency": "INR",
+      "turnaround": "30 - 45 Minutes",
+      "warranty": "3 Months Replacement Warranty",
+      "compatibility": "All Android & Apple iPhone Models",
+      "description": "Original capacity battery replacement for phones suffering from battery drain, low health, or sudden shutdown.",
+      "features": [
+        "100% Battery Health on iPhone",
+        "Zero Overheating",
+        "Long Backup Time",
+        "Professional Installation",
+        "3 Months Warranty"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "item-3",
+      "name": "Charging Jack & Board Repair",
+      "category": "Mobile Repairing",
+      "itemType": "service",
+      "price": 299,
+      "billingType": "Fixed",
+      "currency": "INR",
+      "turnaround": "30 - 45 Minutes",
+      "warranty": "15 Days Warranty",
+      "compatibility": "Type-C, Micro-USB, Lightning Ports",
+      "description": "Replacement of damaged, loose, or slow-charging jacks. Fast charging and OTG data sync guaranteed.",
+      "features": [
+        "Supports Fast / VOOC / PD Charging",
+        "Clean Microphone & Speaker Dusting",
+        "Original Type-C / Lightning Connector"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "item-4",
+      "name": "Water Damage & Motherboard IC Repair",
+      "category": "Mobile Repairing",
+      "itemType": "service",
+      "price": 899,
+      "billingType": "Starting from (Diagnosis required)",
+      "currency": "INR",
+      "turnaround": "24 - 48 Hours",
+      "warranty": "Checking Warranty",
+      "compatibility": "Dead Phones, Short Circuit, No Display, Audio IC, Network IC",
+      "description": "Advanced micro-soldering and IC repair for dead phones, water-damaged logic boards, and short circuits.",
+      "features": [
+        "Ultrasonic Board Cleaning",
+        "Micro-Soldering Station Inspection",
+        "Component Level Fix",
+        "Data Preservation Priority"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "item-5",
+      "name": "Laptop SSD Upgrade (256GB / 512GB NVMe)",
+      "category": "Computer & Laptop Repair",
+      "itemType": "service",
+      "price": 2200,
+      "billingType": "Includes 256GB SSD + Windows Installation",
+      "currency": "INR",
+      "turnaround": "1 Hour (Same Day)",
+      "warranty": "1 Year Replacement Warranty",
+      "compatibility": "Dell, HP, Lenovo, Asus, Acer, Toshiba, Desktop PCs",
+      "description": "Upgrade your slow laptop from HDD to ultra-fast SSD. Makes laptop 10x faster with 10-second boot time.",
+      "features": [
+        "High-Speed NVMe/SATA SSD",
+        "Free Windows 10/11 Pro Setup",
+        "Free MS Office 2021 Installation",
+        "Old HDD Caddy Data Option",
+        "1 Year Brand Warranty"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "item-6",
+      "name": "Windows 10/11 Pro + Complete Drivers & Software Setup",
+      "category": "Computer & Laptop Repair",
+      "itemType": "service",
+      "price": 400,
+      "billingType": "Fixed",
+      "currency": "INR",
+      "turnaround": "30 - 45 Minutes",
+      "warranty": "Lifetime Activation",
+      "compatibility": "All Laptops & Desktop Computers",
+      "description": "Fresh, clean Windows installation with official drivers, MS Office, PDF reader, media player, and security setup.",
+      "features": [
+        "Genuine Windows Pro Activation",
+        "Full Graphic & Wi-Fi Drivers",
+        "Microsoft Office Included",
+        "Virus & Malware Removal",
+        "Performance Tuning"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "item-7",
+      "name": "Laptop Overheating Fix & Thermal Paste Service",
+      "category": "Computer & Laptop Repair",
+      "itemType": "service",
+      "price": 450,
+      "billingType": "Fixed",
+      "currency": "INR",
+      "turnaround": "45 - 60 Minutes",
+      "warranty": "Cooling Guarantee",
+      "compatibility": "All Gaming & Business Laptops",
+      "description": "Complete internal dust cleaning, fan servicing, and application of Arctic MX-4 high-grade thermal paste to stop heating and hanging.",
+      "features": [
+        "Arctic MX-4 Thermal Paste",
+        "Cooling Fan Cleaning & Oiling",
+        "No More Fan Noise or Throttling",
+        "Temperature Drops by 15-20°C"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "item-8",
+      "name": "Custom Business Website Development",
+      "category": "Website Development",
+      "itemType": "service",
+      "price": 8000,
+      "billingType": "One-time package",
+      "currency": "INR",
+      "turnaround": "3 - 5 Days",
+      "warranty": "3 Months Free Support",
+      "compatibility": "Mobile, Tablet, Laptop, Desktop Responsive",
+      "description": "Modern responsive business website with 5-7 pages, WhatsApp direct chat button, lead forms, and Google Maps integration.",
+      "features": [
+        "5-7 Pages Responsive Design",
+        "Free Domain & 1 Year Cloud Hosting",
+        "WhatsApp Quick Order/Contact Button",
+        "Google SEO Optimized",
+        "Admin Panel to Update Content"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "item-9",
+      "name": "E-Commerce Online Store Website",
+      "category": "Website Development",
+      "itemType": "service",
+      "price": 15000,
+      "billingType": "One-time package",
+      "currency": "INR",
+      "turnaround": "7 - 10 Days",
+      "warranty": "6 Months Free Support",
+      "compatibility": "Online Stores, Retail Shops, Clothes, Electronics",
+      "description": "Complete online shopping website with product catalog, cart, Razorpay / UPI / Cash on Delivery payment options, and invoice generation.",
+      "features": [
+        "Unlimited Products Upload",
+        "UPI / Razorpay / COD Integration",
+        "Customer WhatsApp Order Alerts",
+        "Easy Inventory & Order Dashboard",
+        "Speed & Security Protected"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "item-10",
+      "name": "25W / 20W PD Super Fast Charger + Braided Cable",
+      "category": "Mobile Accessories",
+      "itemType": "product",
+      "price": 599,
+      "billingType": "Per Unit",
+      "currency": "INR",
+      "turnaround": "Ready in Shop (J.J Market, Sanhaula)",
+      "warranty": "6 Months Replacement Warranty",
+      "compatibility": "iPhone 11/12/13/14/15/16, Samsung Galaxy S & A series, Type-C",
+      "description": "Original grade 25W Type-C fast charging adapter with heavy duty 1-meter braided fast data cable.",
+      "features": [
+        "0 to 60% in 30 Minutes",
+        "No Heating Protection Chip",
+        "Durable Braided Anti-Tangle Cable",
+        "6 Months Warranty"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "item-11",
+      "name": "Wireless Bluetooth Earbuds (ENC & Deep Bass)",
+      "category": "Mobile Accessories",
+      "itemType": "product",
+      "price": 899,
+      "billingType": "Per Unit",
+      "currency": "INR",
+      "turnaround": "Ready in Shop (J.J Market, Sanhaula)",
+      "warranty": "Testing Warranty",
+      "compatibility": "All Android & Apple iOS Devices",
+      "description": "High-fidelity TWS wireless earbuds with Active Noise Cancellation, clear calling mic, and 24-hour backup case.",
+      "features": [
+        "Deep Bass & Clear Vocals",
+        "Dual Mic for Calls",
+        "24 Hours Battery Case Backup",
+        "Touch Control & Auto Pairing",
+        "Sweatproof Design"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "item-12",
+      "name": "20,000mAh 22.5W Fast Charging Power Bank",
+      "category": "Mobile Accessories",
+      "itemType": "product",
+      "price": 1399,
+      "billingType": "Per Unit",
+      "currency": "INR",
+      "turnaround": "Ready in Shop (J.J Market, Sanhaula)",
+      "warranty": "6 Months Warranty",
+      "compatibility": "Charges 3 devices simultaneously (iPhone, Android, Type-C)",
+      "description": "Heavy-duty 20,000mAh battery capacity with digital LED percentage display and dual USB + Type-C PD ports.",
+      "features": [
+        "20,000mAh Real Capacity",
+        "Charges Phone 4-5 Times",
+        "LED Battery Display",
+        "PD 22.5W Fast Output",
+        "Multi-Protection Safety"
+      ],
+      "status": "active"
+    },
+    {
+      "id": "item-13",
+      "name": "9D Curved Edge Tempered Glass Screen Protector",
+      "category": "Mobile Accessories",
+      "itemType": "product",
+      "price": 120,
+      "billingType": "Includes Free Professional Fitting",
+      "currency": "INR",
+      "turnaround": "2 Minutes at Shop (J.J Market, Sanhaula)",
+      "warranty": "Zero Bubble Guarantee",
+      "compatibility": "All iPhone, Samsung, Xiaomi, Vivo, Oppo, Realme Models",
+      "description": "Premium 9H hardness tempered glass with full glue edge-to-edge coverage, anti-fingerprint coating, and shatter resistance.",
+      "features": [
+        "Edge to Edge Full Screen Cover",
+        "Oleophobic Anti-Fingerprint Coat",
+        "Touch Sensitivity 100%",
+        "Free Bubble-Free Fitting at Shop"
+      ],
+      "status": "active"
+    }
+  ],
+  "lastUpdated": "2026-10-03T05:45:02.963Z",
+  "paymentConfig": {
+    "upiId": "9934215013@upi",
+    "payeeName": "Muzaffar Iqbal Ishaati",
+    "businessName": "CyberMate Solutions",
+    "qrImageUrl": "/uploads/payment-qr.png?t=1791005222934",
+    "acceptedApps": [
+      "PhonePe",
+      "Google Pay",
+      "Paytm",
+      "BHIM UPI",
+      "Amazon Pay"
+    ],
+    "instructions": "Scan official QR code or pay via UPI ID 9934215013@upi using PhonePe, Google Pay, Paytm, or BHIM. Please share payment screenshot on WhatsApp to confirm your order or repair.",
+    "allowCashAtCounter": true
+  },
+  "faqs": [
+    {
+      "id": "faq-1",
+      "question": "How much time does mobile screen replacement take?",
+      "answer": "Mobile screen / display replacement typically takes 1 to 2 hours with same-day hand-to-hand delivery.",
+      "category": "Mobile Repairing"
+    },
+    {
+      "id": "faq-2",
+      "question": "Do you provide warranty on screen and battery replacements?",
+      "answer": "Yes! We provide a 30-Day Testing Warranty on Display replacements and a 3-Month Replacement Warranty on Original Grade Batteries.",
+      "category": "Warranty"
+    },
+    {
+      "id": "faq-3",
+      "question": "What is the store address and working hours?",
+      "answer": "CyberMate Solutions is located at J.J Market, Sanhaula, Bhagalpur, Bihar 813205, India. Business Hours: Monday to Saturday, 09:30 AM to 08:30 PM (IST).",
+      "category": "Store Location"
+    },
+    {
+      "id": "faq-4",
+      "question": "What are the accepted payment methods?",
+      "answer": "You can pay instantly by scanning our official QR Code or via UPI ID: 9934215013@upi using PhonePe, Google Pay, Paytm, or BHIM. Cash at counter is also accepted. No bank account details are required.",
+      "category": "Payment & Billing"
+    },
+    {
+      "id": "faq-5",
+      "question": "My laptop is running slow. Will an SSD upgrade speed it up?",
+      "answer": "Yes, absolutely! Upgrading from a traditional HDD to a high-speed NVMe/SATA SSD makes your laptop up to 10x faster with 10-second boot times. We also include free Windows 10/11 Pro setup and drivers installation.",
+      "category": "Computer & Laptop"
+    },
+    {
+      "id": "faq-6",
+      "question": "Do you develop custom websites and e-commerce stores?",
+      "answer": "Yes, CyberMate Solutions designs and builds professional business websites, e-commerce stores, and portfolios starting from ₹8,000 with complete domain, hosting, and mobile-friendly design.",
+      "category": "Website Development"
+    }
+  ]
+}
